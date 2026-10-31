@@ -1,0 +1,16 @@
+# Dependencies and build output
+node_modules/
+dist/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Secrets: never commit
+.env
+.env.*
+
+# Old generated packages
+DEPLOYMENT_PACKAGE.*
