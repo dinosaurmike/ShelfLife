@@ -1,0 +1,11 @@
+Copyright (c) 2026 Mike Warren. All rights reserved.
+
+The source code in this repository is published so that it can be read and evaluated (for example
+as part of the author's portfolio). No licence is granted to copy, modify, publish, distribute,
+sublicense, sell, host or otherwise use this software or any part of it, except with the author's
+prior written permission.
+
+Third-party software included in this repository (such as QuaggaJS, ZXing and Tesseract.js in
+libs/) remains under its own licence and is not covered by this notice.
+
+Contact: https://github.com/dinosaurmike

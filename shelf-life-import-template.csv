@@ -1,0 +1,4 @@
+Title,Author,Word Count,Pages,Sentiment,Format,Genre,Date Read,Days to Read,Fiction,Review
+"The Martian","Andy Weir",104588,,love,ebook,"Sci-Fi","May 2026",3,Yes,"Word Count is the primary column. Provide it when known."
+"Becoming","Michelle Obama",165000,,love,audiobook,"Non-Fiction","May 2026",10,No,"A remarkable memoir."
+"A Short Book","Example Author",,180,like,physical,"General Fiction","June 2026",2,Yes,"Leave Word Count blank and fill Pages — it auto-estimates at 300 words/page (here: 54,000 words)."

@@ -1,0 +1,21 @@
+{
+  "name": "shelflife",
+  "version": "2.8.0",
+  "private": true,
+  "description": "ShelfLife: a reading tracker and virtual bookshelf (installable web app).",
+  "author": "Mike Warren (https://github.com/dinosaurmike)",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/copy-static.mjs",
+    "preview": "vite preview",
+    "lint": "eslint index.html"
+  },
+  "devDependencies": {
+    "eslint": "^10.8.1",
+    "eslint-plugin-html": "^8.1.4",
+    "vite": "^8.2.2",
+    "esbuild": "^0.28.0"
+  }
+}

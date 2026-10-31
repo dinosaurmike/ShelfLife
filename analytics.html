@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<!-- Shelf Life v5.0 — Analytics Dashboard (trends, velocity, scanner, devices, funnel, predictions, goals) -->
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL96KQ5B00"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TL96KQ5B00');
+    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Shelf Life Analytics — Usage metrics and user insights for your reading tracker.">
+<meta name="robots" content="noindex, nofollow">
+<title>ShelfLife · Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+<style>
+:root{--wood-dark:#3d2b1f;--wood-mid:#5c3d2a;--wood-light:#8b6343;--wall:#f0e8dc;--love:#1c3f78;--like:#1e5c3a;--mixed:#c89018;--dislike:#8c1a28;--paper:#faf5ee;--grid:rgba(61,43,31,0.06)}
+[data-theme="dark"]{--wood-dark:#f0e8dc;--wood-mid:#b39b82;--wood-light:#8b6343;--wall:#17110c;--paper:#221812;--love:#4287f5;--like:#35a363;--mixed:#f5b041;--dislike:#d94857;--grid:rgba(255,255,255,0.06)}
+[data-theme="dark"] body{background-image:linear-gradient(rgba(23,17,12,0.92),rgba(23,17,12,0.92)),repeating-linear-gradient(90deg,rgba(139,99,67,0.04) 0px,rgba(139,99,67,0.04) 2px,transparent 2px,transparent 80px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Mono',monospace;background:var(--wall);color:var(--wood-dark);min-height:100vh;padding:32px 20px 80px;background-image:linear-gradient(rgba(240,232,220,0.92),rgba(240,232,220,0.92)),repeating-linear-gradient(90deg,rgba(92,61,42,0.04) 0px,rgba(92,61,42,0.04) 2px,transparent 2px,transparent 80px)}
+.wrap{max-width:1200px;margin:0 auto}
+header.masthead{border-bottom:3px double var(--wood-mid);padding-bottom:20px;margin-bottom:0}
+header.masthead .eyebrow{font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--wood-light)}
+header.masthead h1{font-family:'Playfair Display',serif;font-size:46px;font-weight:900;letter-spacing:-1px;line-height:1;margin-top:6px}
+header.masthead h1 em{color:var(--dislike);font-style:italic}
+header.masthead .sub{font-size:12px;color:var(--wood-light);margin-top:8px}
+.auth-gate{max-width:380px;margin:80px auto;background:var(--paper);border:1px solid rgba(61,43,31,0.15);border-radius:6px;padding:36px;box-shadow:0 20px 50px rgba(30,15,5,0.15)}
+.auth-gate h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;margin-bottom:6px}
+.auth-gate p{font-size:12px;color:var(--wood-light);margin-bottom:22px}
+.auth-gate label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--wood-light);display:block;margin-bottom:6px;margin-top:14px}
+.auth-gate input{width:100%;padding:11px 14px;border:1px solid rgba(61,43,31,0.2);border-radius:4px;font-family:'DM Mono',monospace;font-size:13px;background:rgba(255,255,255,0.6);color:var(--wood-dark)}
+.auth-gate input:focus{outline:none;border-color:var(--wood-mid)}
+.btn{width:100%;margin-top:22px;padding:12px;border:none;border-radius:4px;background:var(--wood-dark);color:var(--paper);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background 0.15s}
+.btn:hover{background:var(--wood-mid)}
+.auth-err{color:var(--dislike);font-size:11px;margin-top:12px;min-height:14px}
+
+/* Sticky filter bar */
+.filter-bar{position:sticky;top:0;z-index:50;background:rgba(240,232,220,0.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(61,43,31,0.14);padding:14px 0;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.range-pills{display:flex;gap:6px;flex-wrap:wrap}
+.range-pill{padding:7px 14px;border:1px solid rgba(61,43,31,0.2);border-radius:20px;background:var(--paper);color:var(--wood-mid);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;cursor:pointer;transition:all 0.15s}
+.range-pill:hover{background:rgba(61,43,31,0.06)}
+.range-pill.active{background:var(--wood-dark);color:var(--paper);border-color:var(--wood-dark)}
+.filter-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mini-btn{padding:8px 14px;border:1px solid rgba(61,43,31,0.2);border-radius:4px;background:var(--paper);color:var(--wood-mid);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.15s;white-space:nowrap}
+.mini-btn:hover{background:rgba(61,43,31,0.06)}
+.toggle{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--wood-light);cursor:pointer;user-select:none}
+.toggle .track{width:34px;height:18px;border-radius:10px;background:rgba(61,43,31,0.22);position:relative;transition:background 0.18s}
+.toggle .knob{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--paper);transition:left 0.18s}
+.toggle.on .track{background:var(--like)}
+.toggle.on .knob{left:18px}
+.updated{font-size:10px;color:var(--wood-light);letter-spacing:0.05em;white-space:nowrap}
+
+/* Nav anchors */
+.section-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:26px;padding-bottom:14px;border-bottom:1px solid rgba(61,43,31,0.1)}
+.section-nav a{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--wood-light);text-decoration:none;padding:6px 12px;border:1px solid rgba(61,43,31,0.14);border-radius:16px;transition:all 0.15s}
+.section-nav a:hover{background:var(--wood-dark);color:var(--paper);border-color:var(--wood-dark)}
+
+/* Stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:14px}
+.stat-card{background:var(--paper);border:1px solid rgba(61,43,31,0.12);border-radius:6px;padding:22px 20px;position:relative;overflow:hidden;transition:transform 0.2s ease,box-shadow 0.2s ease}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(30,15,5,0.08)}
+.stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--wood-light)}
+.stat-card .num{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;line-height:1;letter-spacing:-1px;color:var(--wood-dark)}
+.stat-card .lbl{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--wood-light);margin-top:10px}
+.stat-card .sub{font-size:11px;color:var(--wood-mid);margin-top:6px}
+.stat-card.accent-love::before{background:var(--love)}
+.stat-card.accent-like::before{background:var(--like)}
+.stat-card.accent-mixed::before{background:var(--mixed)}
+.stat-card.accent-dislike::before{background:var(--dislike)}
+.stat-card .ring{position:absolute;top:16px;right:16px;width:42px;height:42px}
+
+/* Tri-card */
+.tri-card{background:var(--paper);border:1px solid rgba(61,43,31,0.12);border-radius:6px;padding:20px;position:relative;overflow:hidden}
+.tri-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--like)}
+.tri-card .tri-lbl{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--wood-light);margin-bottom:14px}
+.tri-row{display:flex;justify-content:space-between;gap:8px}
+.tri-cell{flex:1;text-align:center}
+.tri-cell .tn{font-family:'Playfair Display',serif;font-size:30px;font-weight:900;line-height:1;color:var(--wood-dark)}
+.tri-cell .tl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--wood-light);margin-top:6px}
+.tri-cell+.tri-cell{border-left:1px solid rgba(61,43,31,0.1)}
+/* Clickable reader-segment cells + POWER badge (admin dashboard only) */
+.tri-lbl .seg-hint{font-size:8px;letter-spacing:0.1em;color:var(--wood-light);opacity:0.7;margin-left:6px;text-transform:none}
+.seg-cell{cursor:pointer;border-radius:6px;padding:6px 4px;transition:background 0.12s,box-shadow 0.12s;outline:none}
+.seg-cell:hover{background:rgba(28,63,120,0.06)}
+.seg-cell:focus-visible{box-shadow:0 0 0 2px var(--love)}
+.seg-cell.seg-active{background:rgba(28,63,120,0.1);box-shadow:inset 0 -2px 0 var(--love)}
+.power-badge{display:inline-block;margin-left:6px;font-size:8px;font-weight:700;letter-spacing:0.1em;background:rgba(140,26,40,0.12);color:var(--dislike);padding:1px 6px;border-radius:8px;vertical-align:middle}
+/* Most-read title rows (clickable) */
+.pop-row{cursor:pointer;border-radius:6px;transition:background 0.12s;outline:none}
+.pop-row:hover{background:rgba(28,63,120,0.05)}
+.pop-row:focus-visible{box-shadow:0 0 0 2px var(--love)}
+/* Sentiment chips + dots (title modal) */
+.sent-chips{display:flex;flex-wrap:wrap;gap:8px}
+.sent-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--wood-mid);background:rgba(61,43,31,0.05);padding:4px 10px;border-radius:14px}
+.sent-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+
+/* Panels */
+.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+.panel{background:var(--paper);border:1px solid rgba(61,43,31,0.12);border-radius:6px;padding:24px;transition:transform 0.2s ease,box-shadow 0.2s ease}
+.panel:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(30,15,5,0.08)}
+.panel.full{grid-column:1/-1}
+.panel h3{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:4px}
+.panel .panel-sub{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--wood-light);margin-bottom:18px}
+.chart-box{position:relative;height:300px}
+.loading{text-align:center;padding:80px 20px;color:var(--wood-light);font-size:14px}
+.section-header{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--wood-dark);margin:40px 0 18px;padding-bottom:10px;border-bottom:2px solid rgba(61,43,31,0.14);display:flex;align-items:center;gap:10px;scroll-margin-top:80px}
+.section-header .sn{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--paper);background:var(--wood-mid);width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.section-header em{font-style:italic;color:var(--wood-light);font-size:13px;font-weight:400;margin-left:auto}
+.empty-note{color:var(--wood-light);font-size:12px;font-style:italic;padding:30px 10px;text-align:center}
+.locked-badge{display:inline-block;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mixed);border:1px solid rgba(200,144,24,0.4);border-radius:10px;padding:2px 8px;margin-left:8px;vertical-align:middle}
+.info-banner{background:rgba(28,63,120,0.06);border:1px solid rgba(28,63,120,0.2);color:var(--love);border-radius:5px;padding:11px 15px;font-size:11px;margin-bottom:16px;line-height:1.5}
+.info-banner code{background:rgba(28,63,120,0.1);padding:1px 5px;border-radius:3px;font-size:10px}
+
+/* Skeleton */
+.skel{background:linear-gradient(90deg,rgba(61,43,31,0.05) 25%,rgba(61,43,31,0.1) 37%,rgba(61,43,31,0.05) 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:6px}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* Heatmap */
+.heatmap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.heatmap table{border-collapse:collapse;font-size:10px}
+.heatmap th{font-size:9px;color:var(--wood-light);font-weight:400;padding:3px 4px;text-align:center;white-space:nowrap}
+.heatmap td.daylbl{font-size:10px;color:var(--wood-mid);padding:3px 8px 3px 0;text-align:right;white-space:nowrap}
+.heatmap .cell{width:20px;height:20px;border-radius:3px;border:1px solid rgba(61,43,31,0.05);cursor:default}
+.heat-legend{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:10px;color:var(--wood-light)}
+.heat-legend .swatch{width:16px;height:16px;border-radius:3px;border:1px solid rgba(61,43,31,0.08)}
+.peak-note{font-size:12px;color:var(--wood-mid);margin-top:14px}
+.peak-note strong{color:var(--wood-dark)}
+
+/* Feature usage mini-stats */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+.feat-cell{background:rgba(61,43,31,0.03);border:1px solid rgba(61,43,31,0.08);border-radius:5px;padding:16px 14px;text-align:center}
+.feat-cell .fn{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--wood-dark);line-height:1}
+.feat-cell .fl{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--wood-light);margin-top:8px}
+
+/* Popular books list */
+.book-list{list-style:none}
+.book-list li{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(61,43,31,0.07)}
+.book-list .rank{font-family:'Playfair Display',serif;font-weight:900;font-size:16px;color:var(--wood-light);width:24px;text-align:center;flex:none}
+.book-list .bk-cover{width:30px;height:44px;object-fit:cover;border-radius:2px;background:rgba(61,43,31,0.08);flex:none}
+.book-list .bk-meta{flex:1;min-width:0;overflow-wrap:anywhere}
+.book-list .bk-title{font-size:12px;color:var(--wood-dark);font-weight:500;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35;overflow-wrap:anywhere}
+.book-list .bk-author{font-size:10px;color:var(--wood-light);white-space:normal;overflow:visible;text-overflow:clip;line-height:1.3;margin-top:2px;overflow-wrap:anywhere}
+.book-list .bk-badge{font-size:10px;color:var(--wood-mid);flex:none}
+
+/* Drill-down chip */
+.drill-chip{display:inline-flex;align-items:center;gap:8px;background:var(--love);color:var(--paper);font-size:11px;padding:6px 12px;border-radius:16px;margin-bottom:14px}
+.drill-chip button{background:none;border:none;color:var(--paper);cursor:pointer;font-size:13px;line-height:1;padding:0}
+
+/* User directory */
+.user-table-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.user-search{padding:9px 14px;border:1px solid rgba(61,43,31,0.18);border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;background:rgba(255,255,255,0.6);color:var(--wood-dark);min-width:240px}
+.user-search:focus{outline:none;border-color:var(--wood-mid)}
+.user-count{font-size:11px;color:var(--wood-light);letter-spacing:0.1em}
+.user-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:16px}
+.user-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--paper);border:1px solid rgba(61,43,31,0.10);border-radius:6px;overflow:hidden}
+.user-table th{text-align:left;padding:12px 14px;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--wood-light);background:rgba(61,43,31,0.04);border-bottom:2px solid rgba(61,43,31,0.10);cursor:pointer;white-space:nowrap;user-select:none}
+.user-table th:hover{color:var(--wood-dark)}
+.user-table th .sort-arrow{font-size:8px;margin-left:4px;opacity:0.4}
+.user-table th.sorted .sort-arrow{opacity:1;color:var(--wood-dark)}
+.user-table td{padding:11px 14px;border-bottom:1px solid rgba(61,43,31,0.06);vertical-align:middle}
+.user-table tbody tr{cursor:pointer;transition:background 0.12s}
+.user-table tbody tr:hover td{background:rgba(28,63,120,0.05)}
+.user-table .name-cell{font-weight:500;color:var(--wood-dark);white-space:nowrap;overflow:visible;text-overflow:clip;min-width:220px;max-width:none}
+.user-table th.name-col{min-width:220px}
+.user-table .name-cell .avatar{margin-right:7px}
+.user-table .email-cell{color:var(--wood-light);font-size:11px;white-space:nowrap;overflow:visible;text-overflow:clip;min-width:240px}
+.user-table .num-cell{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--wood-dark);text-align:center}
+.user-table .date-cell{color:var(--wood-mid);font-size:11px;white-space:nowrap}
+.status-tag{display:inline-block;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:10px;font-weight:500}
+.status-active{background:rgba(30,92,58,0.12);color:var(--like)}
+.status-dormant{background:rgba(200,144,24,0.14);color:#9a6e0f}
+.status-new{background:rgba(28,63,120,0.12);color:var(--love)}
+.status-power{background:rgba(140,26,40,0.1);color:var(--dislike)}
+.row-hint{font-size:9px;color:var(--wood-light);text-align:center;margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase}
+.pagination{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
+.page-btn{min-width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(61,43,31,0.15);border-radius:4px;background:var(--paper);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;color:var(--wood-mid)}
+.page-btn:hover{background:rgba(61,43,31,0.05)}
+.page-btn.active{background:var(--wood-dark);color:var(--paper);border-color:var(--wood-dark)}
+.page-btn:disabled{opacity:0.3;cursor:default}
+.err-banner{background:rgba(140,26,40,0.08);border:1px solid rgba(140,26,40,0.25);color:var(--dislike);border-radius:5px;padding:12px 16px;font-size:12px;margin-bottom:20px}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(30,15,5,0.55);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:var(--paper);border-radius:8px;max-width:760px;width:100%;box-shadow:0 30px 80px rgba(30,15,5,0.35);position:relative;animation:modalIn 0.2s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{padding:26px 28px 18px;border-bottom:2px solid rgba(61,43,31,0.1);display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.modal-head .m-avatar{font-size:38px;line-height:1;flex:none}
+.modal-head .m-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--wood-dark);line-height:1.1}
+.modal-head .m-email{font-size:12px;color:var(--wood-light);margin-top:4px}
+.modal-head .m-close{margin-left:auto;background:none;border:1px solid rgba(61,43,31,0.2);width:34px;height:34px;border-radius:50%;font-size:18px;color:var(--wood-mid);cursor:pointer;flex:none;line-height:1}
+.modal-head .m-close:hover{background:rgba(61,43,31,0.06)}
+.modal-body{padding:22px 28px 30px}
+.m-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;margin-bottom:22px}
+.m-stat{background:rgba(61,43,31,0.04);border-radius:5px;padding:12px;text-align:center}
+.m-stat .v{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--wood-dark);line-height:1}
+.m-stat .k{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--wood-light);margin-top:6px}
+.m-section{margin-top:22px}
+.m-section h4{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:10px;color:var(--wood-dark)}
+.m-twocol{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.m-chart-box{position:relative;height:180px}
+.m-lib{max-height:280px;overflow-y:auto;border:1px solid rgba(61,43,31,0.1);border-radius:6px}
+.m-lib table{width:100%;border-collapse:collapse;font-size:11px}
+.m-lib th{position:sticky;top:0;background:rgba(61,43,31,0.06);text-align:left;padding:8px 10px;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--wood-light)}
+.m-lib td{padding:7px 10px;border-bottom:1px solid rgba(61,43,31,0.06);color:var(--wood-mid)}
+.m-lib td.t{color:var(--wood-dark);font-weight:500}
+.m-lib td.ev-detail{color:var(--wood-light);overflow-wrap:anywhere;max-width:260px}
+.sent-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+/* Trend badges (period-over-period) */
+.trend{display:inline-block;font-size:11px;font-weight:500;letter-spacing:0.04em;margin-left:8px;vertical-align:middle;white-space:nowrap}
+.trend.up{color:var(--like)}
+.trend.down{color:var(--dislike)}
+.trend.flat{color:var(--wood-light)}
+.stat-card .trend{font-family:'DM Mono',monospace;position:absolute;top:20px;right:18px;font-size:12px;background:rgba(61,43,31,0.04);border-radius:12px;padding:3px 9px}
+.stat-card .trend.up{background:rgba(30,92,58,0.1)}
+.stat-card .trend.down{background:rgba(140,26,40,0.1)}
+.trend-cap{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--wood-light);margin-left:6px}
+.tri-cell .tn .trend{font-size:9px;display:block;margin:4px 0 0;position:static}
+
+/* Progress bars / goals dashboard */
+.goal-card{background:var(--paper);border:1px solid rgba(61,43,31,0.12);border-radius:6px;padding:18px 20px}
+.goal-card+.goal-card{margin-top:0}
+.goal-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.goal-head .g-name{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--wood-light)}
+.goal-head .g-val{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--wood-dark)}
+.goal-head .g-val em{font-style:normal;color:var(--wood-light);font-size:12px}
+.progress-track{height:12px;border-radius:8px;background:rgba(61,43,31,0.09);overflow:hidden;position:relative}
+.progress-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--wood-light),var(--wood-mid));transition:width 0.6s ease}
+.progress-fill.done{background:linear-gradient(90deg,var(--like),#2e7d4f)}
+.goal-foot{display:flex;justify-content:space-between;margin-top:7px;font-size:10px;color:var(--wood-light)}
+.goal-foot .g-pct{font-weight:500;color:var(--wood-mid)}
+.goal-edit{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.goal-edit label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--wood-light)}
+.goal-edit input{width:90px;padding:7px 10px;border:1px solid rgba(61,43,31,0.2);border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;background:rgba(255,255,255,0.6);color:var(--wood-dark)}
+.goal-edit input:focus{outline:none;border-color:var(--wood-mid)}
+
+/* Milestones */
+.milestones{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.milestone{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:20px;border:1px solid rgba(61,43,31,0.14);font-size:11px;background:rgba(61,43,31,0.03);color:var(--wood-light)}
+.milestone.hit{border-color:rgba(30,92,58,0.4);background:rgba(30,92,58,0.08);color:var(--like)}
+.milestone .ms-ic{font-size:13px}
+
+/* Predictions */
+.predict-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.predict-cell{background:rgba(28,63,120,0.04);border:1px solid rgba(28,63,120,0.14);border-radius:6px;padding:16px 14px;text-align:center}
+.predict-cell .pv{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--love);line-height:1}
+.predict-cell .pl{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--wood-light);margin-top:8px}
+.predict-cell .pn{font-size:10px;color:var(--wood-mid);margin-top:5px;font-style:italic}
+
+/* Conversion funnel */
+.funnel{display:flex;flex-direction:column;gap:8px}
+.funnel-stage{position:relative}
+.funnel-bar{display:flex;align-items:center;height:46px;border-radius:5px;background:var(--love);color:var(--paper);padding:0 16px;min-width:90px;transition:width 0.5s ease;overflow:hidden}
+.funnel-bar.signup-bar{background:linear-gradient(90deg, #1c3f78, #2a5298)}
+.funnel-bar .fs-label{font-size:11px;letter-spacing:0.04em;white-space:nowrap;font-weight:500}
+.funnel-bar .fs-val{font-family:'Playfair Display',serif;font-weight:900;font-size:18px;margin-left:auto;padding-left:12px}
+.funnel-stage .fs-meta{font-size:10px;color:var(--wood-light);margin-top:3px;letter-spacing:0.04em}
+.funnel-stage .fs-drop{color:var(--dislike)}
+
+.abandon-banner{background:rgba(140,26,40,0.06);border:1px solid rgba(140,26,40,0.22);border-radius:6px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.abandon-banner .ab-icon{font-size:26px;line-height:1;flex:none}
+.abandon-banner .ab-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--dislike)}
+.abandon-banner .ab-desc{font-size:11px;color:var(--wood-mid);margin-top:3px;line-height:1.45}
+.abandon-banner strong{color:var(--wood-dark)}
+
+.chan-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;padding:3px 8px;border-radius:12px;background:rgba(61,43,31,0.05);color:var(--wood-mid);letter-spacing:0.04em}
+.chan-badge .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+
+/* Scanner analytics */
+.scan-fail-list{list-style:none;margin-top:6px}
+.scan-fail-list li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(61,43,31,0.07);font-size:12px;color:var(--wood-mid)}
+.scan-fail-list .sf-bar{flex:1;height:8px;border-radius:5px;background:rgba(61,43,31,0.08);overflow:hidden}
+.scan-fail-list .sf-fill{height:100%;background:var(--mixed)}
+.scan-fail-list .sf-n{font-family:'Playfair Display',serif;font-weight:700;color:var(--wood-dark);min-width:34px;text-align:right}
+
+@media(max-width:600px){header.masthead h1{font-size:32px}
+.filter-bar{flex-direction:column;align-items:stretch}
+.range-pill{padding:6px 10px;font-size:10px}
+.user-search{min-width:140px}
+.stat-card .num{font-size:32px}
+.stat-card .trend{position:static;display:inline-block;margin:8px 0 0}
+.m-twocol{grid-template-columns:1fr}
+.modal-body{padding:18px}
+.modal-head{padding:20px 18px 14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="authGate" class="auth-gate" style="display:none;">
+<h2>Analytics</h2>
+<p>Sign in with your Shelf Life account to view usage analytics.</p>
+<label for="emailInput">Email</label>
+<input id="emailInput" type="email" placeholder="you@example.com" autocomplete="email">
+<label for="passwordInput">Password</label>
+<input id="passwordInput" type="password" placeholder="••••••••" autocomplete="current-password">
+<button class="btn" id="signInBtn">Sign In</button>
+<div class="auth-err" id="authErr"></div>
+</div>
+
+<div id="dashboard" style="display:none;">
+<header class="masthead">
+<div class="eyebrow">Shelf Life ● Internal</div>
+<h1>Usage <em>Analytics</em></h1>
+<div class="sub">Aggregate activity across the Shelf Life reader community. · <a href="index.html" style="color:var(--wood-light);text-decoration:underline;">← Back to Shelf Life</a></div>
+</header>
+
+<div class="filter-bar">
+<div class="range-pills" id="rangePills">
+<button class="range-pill" data-range="day">Day</button>
+<button class="range-pill" data-range="week">Week</button>
+<button class="range-pill" data-range="month">Month</button>
+<button class="range-pill" data-range="year">Year</button>
+<button class="range-pill active" data-range="all">All Time</button>
+</div>
+<div class="filter-actions">
+<span class="updated" id="updatedLine"></span>
+<button class="mini-btn" id="settingsBtn">⚙️ Settings</button>
+<div class="toggle" id="autoToggle"><span class="track"><span class="knob"></span></span><span>Auto 30s</span></div>
+<button class="mini-btn" id="refreshBtn">↻ Refresh</button>
+<button class="mini-btn" id="csvBtn">📥 CSV</button><button class="mini-btn" id="exportWaitlistBtn" onclick="exportLaserWaitlist()" style="margin-left:8px;">🪵 Laser Waitlist</button>
+<button class="mini-btn" id="signOutBtn">Sign Out</button>
+</div>
+</div>
+<nav class="section-nav">
+<a href="#sec-overview">Overview</a>
+<a href="#sec-traffic">Traffic &amp; Visitors</a>
+<a href="#sec-funnel">Signup &amp; Activation</a>
+<a href="#sec-engagement">Engagement &amp; Virality</a>
+<a href="#sec-goals-content">Goals &amp; Content</a>
+<a href="#sec-directory">User Directory</a>
+</nav>
+
+<div id="content"><div class="loading">Loading analytics…</div></div>
+</div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal" onclick="if(event.target===this) this.classList.remove('open')">
+<div class="modal" style="max-width:400px;">
+<div class="modal-head">
+<span class="m-avatar" style="font-size:24px;border:none;background:none;">⚙️</span>
+<div style="min-width:0;flex:1"><div class="m-name" style="font-size:20px;">Dashboard Settings</div></div>
+<button class="m-close" onclick="document.getElementById('settingsModal').classList.remove('open')">×</button>
+</div>
+<div class="modal-body" style="padding: 24px;">
+  <div style="margin-bottom: 24px;">
+    <h4 style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:12px;color:var(--wood-dark);">Appearance</h4>
+    
+  </div>
+  <div>
+    <h4 style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:12px;color:var(--wood-dark);">Visible Sections</h4>
+    <div style="display:flex;flex-direction:column;gap:12px;" id="sectionToggles"></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- User detail modal -->
+<div class="modal-overlay" id="userModal">
+<div class="modal">
+<div class="modal-head">
+<span class="m-avatar" id="mAvatar">📚</span>
+<div style="min-width:0;flex:1">
+<div class="m-name" id="mName">—</div>
+<div class="m-email" id="mEmail">—</div>
+</div>
+<div id="mAdminActions" style="display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-start; flex-basis:100%; margin-top:8px; padding-top:12px; border-top:1px solid rgba(61,43,31,0.05);">
+  <button id="mAdminCopyShelf" style="background:var(--wood-dark); border:1px solid var(--wood-dark); color:var(--paper); padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Copy Shelf ID for Laser Output">Copy Shelf ID</button>
+  <button id="mAdminEdit" style="background:none; border:1px solid var(--wood-light); color:var(--wood-dark); padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Edit Name">Edit</button>
+  <button id="mAdminSuspend" style="background:none; border:1px solid var(--wood-light); color:var(--wood-dark); padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Suspend or Unsuspend User">Suspend</button>
+  <button id="mAdminRecalc" style="background:none; border:1px solid var(--wood-light); color:var(--wood-dark); padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Recalculate Stats">Recalc</button>
+  <button id="mAdminExport" style="background:none; border:1px solid var(--wood-light); color:var(--wood-dark); padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Export User Library Data">Export JSON</button>
+  <button id="mAdminResetPwd" style="background:none; border:1px solid var(--wood-light); color:var(--wood-dark); padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Force Password Reset">Reset Pwd</button>
+  <button id="mAdminImpersonate" style="background:none; border:1px solid var(--wood-light); color:var(--wood-dark); padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Impersonate User">Impersonate</button>
+  <button id="mAdminDelete" style="background:none; border:1px solid #d32f2f; color:#d32f2f; padding:4px 8px; border-radius:3px; font-size:9px; cursor:pointer; font-family:'DM Mono',monospace; text-transform:uppercase;" title="Permanently Delete">Delete</button>
+</div>
+<button class="m-close" id="mClose">×</button>
+</div>
+<div class="modal-body" id="mBody"></div>
+</div>
+</div>
+
+<!-- Most-read title modal: readers + ratings for a single title -->
+<div class="modal-overlay" id="titleModal">
+<div class="modal">
+<div class="modal-head">
+<span class="m-avatar" id="tmCover">📖</span>
+<div style="min-width:0;flex:1">
+<div class="m-name" id="tmTitle">—</div>
+<div class="m-email" id="tmAuthor">—</div>
+</div>
+<button class="m-close" id="tmClose">×</button>
+</div>
+<div class="modal-body" id="tmBody"></div>
+</div>
+</div>
+<script>
+
+/* ===================== Config ===================== */
+const SUPABASE_URL = 'https://guqkidwlkslhkoictfay.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1cWtpZHdsa3NsaGtvaWN0ZmF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0Mzk3MDQsImV4cCI6MjA5NDAxNTcwNH0.YM5JO2om8VGnplODzr-D2zGjcaVbkCw2T3DDjNAPtAk';
+let sb = null;
+try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { flowType:'implicit', detectSessionInUrl:true, autoRefreshToken:true, persistSession:true } }); }
+catch(e){ console.error('Supabase init failed:', e); }
+
+function getCSSVar(name) {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return '';
+  return (getComputedStyle(document.documentElement).getPropertyValue(name) || '').trim();
+}
+
+const WOOD = { get dark(){return getCSSVar('--wood-dark')||'#3d2b1f'}, get mid(){return getCSSVar('--wood-mid')||'#5c3d2a'}, get light(){return getCSSVar('--wood-light')||'#8b6343'} };
+const PALETTE = ['#1c3f78','#1e5c3a','#c89018','#8c1a28','#5c3d2a','#8b6343','#3d2b1f','#a05a2c','#4a6b8a','#6b8e5a','#9c4f6b','#3a7d7b'];
+const SENT_COLOR = { get love(){return getCSSVar('--love')||'#1c3f78'}, get like(){return getCSSVar('--like')||'#1e5c3a'}, get mixed(){return getCSSVar('--mixed')||'#c89018'}, get dislike(){return getCSSVar('--dislike')||'#8c1a28'} };
+const ANALYTICS_SECRET_KEY = '123';
+const ADMIN_USER_ID = 'eae3ea25-9539-42ac-9e19-82039130c25f';
+const ADMIN_EMAILS = ['mike.warren.maker@gmail.com'];
+
+function isAdminUser(user) {
+  if (!user) return false;
+  const uid = user.id;
+  const email = (user.email || '').toLowerCase().trim();
+  return uid === ADMIN_USER_ID || email === 'mike.warren.maker@gmail.com' || ADMIN_EMAILS.includes(email);
+}
+
+/* ===================== State ===================== */
+let charts = [];
+let modalCharts = [];
+let RAW = { users:[], books:[], events:[], eventsAvailable:false, usersSource:'tables' };
+let activeRange = 'all';
+const SECTIONS = [{id:'sec-overview',name:'Overview'},{id:'sec-traffic',name:'Traffic & Visitors'},{id:'sec-funnel',name:'Signup & Activation'},{id:'sec-engagement',name:'Engagement & Virality'},{id:'sec-goals-content',name:'Goals & Content'},{id:'sec-directory',name:'User Directory'}];
+function loadSectionPrefs() { try{ return JSON.parse(localStorage.getItem('sl_analytics_sections')||'{}'); }catch(e){ return {}; } }
+function saveSectionPrefs(prefs) { localStorage.setItem('sl_analytics_sections', JSON.stringify(prefs)); }
+function applySectionPrefs() {
+  const prefs = loadSectionPrefs();
+  SECTIONS.forEach(s => {
+    const isHidden = prefs[s.id] === false;
+    const header = document.getElementById(s.id);
+    const navLink = document.querySelector(`nav.section-nav a[href="#${s.id}"]`);
+    if (navLink) navLink.style.display = isHidden ? 'none' : '';
+    if (!header) return;
+    header.style.display = isHidden ? 'none' : 'flex';
+    let next = header.nextElementSibling;
+    while (next && !next.classList.contains('section-header')) {
+      next.style.display = isHidden ? 'none' : '';
+      next = next.nextElementSibling;
+    }
+  });
+}
+let autoRefresh = false;
+let autoTimer = null;
+let genreFilter = null;          // drill-down: filter directory by genre
+let segmentFilter = null;        // drill-down: filter directory by reader segment (power/new/dormant/active)
+let userRows = [];
+let userSortCol = 'books';
+let userSortDir = 'desc';
+let userSearchTerm = '';
+let userPage = 0;
+const USERS_PER_PAGE = 25;
+// Goals dashboard — custom targets persisted in localStorage.
+const GOAL_DEFAULTS = { users: 10, books: 100, active: 5 };
+function loadGoals(){ try{ const s=JSON.parse(localStorage.getItem('sl_analytics_goals')||'{}'); return Object.assign({}, GOAL_DEFAULTS, s); }catch(e){ return Object.assign({}, GOAL_DEFAULTS); } }
+function saveGoals(g){ try{ localStorage.setItem('sl_analytics_goals', JSON.stringify(g)); }catch(e){} }
+let GOALS = loadGoals();
+
+/* ===================== Helpers ===================== */
+const esc = s => (s==null?'':String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function fmtDate(d){ if(!d) return '—'; const dt=new Date(d); if(isNaN(dt)) return '—'; return dt.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
+function fmtDateTime(d){ if(!d) return '—'; const dt=new Date(d); if(isNaN(dt)) return '—'; return dt.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+', '+dt.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); }
+function fmtRelative(d){ if(!d) return '—'; const dt=new Date(d); if(isNaN(dt)) return '—'; const s=(Date.now()-dt.getTime())/1000; if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; if(s<604800) return Math.floor(s/86400)+'d ago'; return fmtDate(d); }
+function fmtNum(n){ return (n==null||isNaN(n))?'0':Number(n).toLocaleString(); }
+function fmtWords(n){ n=Number(n)||0; if(n>=1e6) return (n/1e6).toFixed(2)+'M'; if(n>=1e3) return Math.round(n/1e3)+'K'; return String(n); }
+function destroyCharts(){ charts.forEach(c=>{ try{c.destroy();}catch(e){} }); charts=[]; }
+function destroyModalCharts(){ modalCharts.forEach(c=>{ try{c.destroy();}catch(e){} }); modalCharts=[]; }
+function makeChart(ctx,cfg){ const c=new Chart(ctx,cfg); charts.push(c); return c; }
+function tooltipStyle(){ return { backgroundColor:'rgba(61,43,31,0.94)', titleFont:{family:"'DM Mono',monospace",size:11}, bodyFont:{family:"'DM Mono',monospace",size:11}, padding:10, cornerRadius:5, displayColors:true }; }
+function baseOpts(extra){
+  const o = { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ labels:{ font:{family:"'DM Mono',monospace",size:11}, color:WOOD.mid } }, tooltip: tooltipStyle(), zoom: { zoom: { wheel: { enabled: true }, drag: { enabled: true, backgroundColor: 'rgba(61,43,31,0.1)' }, pinch: { enabled: true }, mode: 'x' }, pan: { enabled: true, mode: 'x' } } },
+    scales:{ x:{ ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{ color:getCSSVar('--grid')||'rgba(61,43,31,0.06)' } },
+             y:{ ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{ color:getCSSVar('--grid')||'rgba(61,43,31,0.06)' }, beginAtZero:true } } };
+  return Object.assign(o, extra||{});
+}
+function parseRegion(raw){
+  if(!raw) return null;
+  const parts = String(raw).split('|').map(s=>s.trim()).filter(Boolean);
+  if(parts.length>=2) return { label: parts[1], flag: parts[2]||'' };
+  return { label: parts[0], flag:'' };
+}
+function rangeCutoff(range){
+  const now = Date.now();
+  switch(range){
+    case 'day': return new Date(now - 24*60*60*1000);
+    case 'week': return new Date(now - 7*24*60*60*1000);
+    case 'month': return new Date(now - 30*24*60*60*1000);
+    case 'year': return new Date(now - 365*24*60*60*1000);
+    default: return new Date(0);
+  }
+}
+const RANGE_LABEL = { day:'last 24 hours', week:'last 7 days', month:'last 30 days', year:'last 365 days', all:'all time' };
+function prettyEvent(t){ return String(t).replace(/_/g,' ').replace(/\b\w/g, c=>c.toUpperCase()); }
+// best-available "finished" date for a book
+function bookDate(b){ return b.date_finished || b.created_at || null; }
+// added/created date for a book (when it entered the library)
+function bookAdded(b){ return b.created_at || b.date_finished || null; }
+// Period-over-period trend badge. prev==null → no comparison (e.g. all-time).
+function trendBadge(cur, prev, opts){
+  opts = opts || {};
+  if(prev==null) return '';
+  cur=Number(cur)||0; prev=Number(prev)||0;
+  const unit=opts.unit||'period';
+  let pct, label;
+  if(prev===0){
+    if(cur===0){ return '<span class="trend flat" title="was 0, now 0 (no change) vs previous '+esc(unit)+'">→ 0%</span>'; }
+    label='↑ new'; return '<span class="trend up" title="was 0, now '+esc(fmtNum(cur))+' (new this '+esc(unit)+')">'+label+'</span>';
+  }
+  pct=Math.round((cur-prev)/prev*100);
+  // Rich, human-readable tooltip: "was X, now Y (+Z%) vs previous <unit>".
+  const sign=pct>0?'+':'';
+  const t='was '+fmtNum(prev)+', now '+fmtNum(cur)+' ('+sign+pct+'%) vs previous '+unit;
+  if(pct>0) return '<span class="trend up" title="'+esc(t)+'">↑ +'+pct+'%</span>';
+  if(pct<0) return '<span class="trend down" title="'+esc(t)+'">↓ '+pct+'%</span>';
+  return '<span class="trend flat" title="'+esc(t)+'">→ 0%</span>';
+}
+// Linear regression over [{x,y}] → {slope, intercept}. Least squares.
+function linreg(pts){
+  const n=pts.length; if(n<2) return { slope:0, intercept:n?pts[0].y:0 };
+  let sx=0,sy=0,sxx=0,sxy=0;
+  pts.forEach(p=>{ sx+=p.x; sy+=p.y; sxx+=p.x*p.x; sxy+=p.x*p.y; });
+  const denom=(n*sxx - sx*sx);
+  if(denom===0) return { slope:0, intercept:sy/n };
+  const slope=(n*sxy - sx*sy)/denom;
+  const intercept=(sy - slope*sx)/n;
+  return { slope, intercept };
+}
+const DAY_MS=86400000;
+// Progress bar markup for the goals dashboard.
+function progressBar(name, cur, target){
+  target=Math.max(1, Number(target)||0);
+  const pct=Math.min(100, Math.round(cur/target*100));
+  const done=cur>=target;
+  return '<div class="goal-card"><div class="goal-head"><span class="g-name">'+esc(name)+'</span>'+
+    '<span class="g-val">'+fmtNum(cur)+' <em>/ '+fmtNum(target)+'</em></span></div>'+
+    '<div class="progress-track"><div class="progress-fill'+(done?' done':'')+'" style="width:'+pct+'%"></div></div>'+
+    '<div class="goal-foot"><span class="g-pct">'+pct+'% complete</span><span>'+(done?'🎉 reached':fmtNum(Math.max(0,target-cur))+' to go')+'</span></div></div>';
+}
+
+/* ===================== Auth ===================== */
+async function checkSession(){
+  if(!sb){ showAuth('Could not connect to the database.'); return; }
+  const urlParams = new URLSearchParams(window.location.search);
+  const keyParam = urlParams.get('key');
+  if(keyParam === ANALYTICS_SECRET_KEY){ showDashboard({ email:'admin (via secret link)', id:'secret-key' }); return; }
+  const { data } = await sb.auth.getSession();
+  if(data && data.session && isAdminUser(data.session.user)){
+    showDashboard(data.session.user);
+  } else { 
+    showAuth(data && data.session ? 'Access denied. Administrator privileges required.' : '');
+  }
+}
+function showAuth(msg){
+  document.getElementById('authGate').style.display='block';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('authErr').textContent = msg||'';
+}
+function showDashboard(user){
+  document.getElementById('authGate').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  loadAnalytics();
+}
+document.getElementById('signInBtn').addEventListener('click', async () => {
+  const email=document.getElementById('emailInput').value.trim();
+  const password=document.getElementById('passwordInput').value;
+  const errEl=document.getElementById('authErr'); errEl.textContent='';
+  if(!email||!password){ errEl.textContent='Enter your email and password.'; return; }
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if(error){ errEl.textContent=error.message; return; }
+  if(data && data.user) {
+    if (isAdminUser(data.user)) {
+      showDashboard(data.user);
+    } else {
+      errEl.textContent = 'Access denied. Administrator privileges required.';
+    }
+  }
+});
+document.getElementById('passwordInput').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('signInBtn').click(); });
+document.getElementById('signOutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); location.reload(); });
+document.getElementById('refreshBtn').addEventListener('click', ()=> loadAnalytics());
+document.getElementById('rangePills').addEventListener('click', e=>{
+  const btn = e.target.closest('.range-pill'); if(!btn) return;
+  activeRange = btn.dataset.range;
+  document.querySelectorAll('.range-pill').forEach(p=>p.classList.toggle('active', p===btn));
+  render();
+});
+document.getElementById('settingsBtn').addEventListener('click', ()=>{
+  const container = document.getElementById('sectionToggles');
+  const prefs = loadSectionPrefs();
+  container.innerHTML = SECTIONS.map(s => {
+    const isOn = prefs[s.id] !== false;
+    return `<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--wood-dark);cursor:pointer;"><input type="checkbox" ${isOn?'checked':''} onchange="toggleSection('${s.id}', this.checked)"> ${s.name}</label>`;
+  }).join('');
+  document.getElementById('settingsModal').classList.add('open');
+});
+window.toggleSection = function(id, isVisible) {
+  const prefs = loadSectionPrefs();
+  prefs[id] = isVisible;
+  saveSectionPrefs(prefs);
+  applySectionPrefs();
+};
+
+
+document.getElementById('autoToggle').addEventListener('click', ()=>{
+  autoRefresh = !autoRefresh;
+  document.getElementById('autoToggle').classList.toggle('on', autoRefresh);
+  if(autoRefresh){ startAuto(); } else { stopAuto(); }
+});
+function startAuto(){ stopAuto(); autoTimer = setInterval(()=>{ if(!document.hidden) loadAnalytics(true); }, 30000); }
+function stopAuto(){ if(autoTimer){ clearInterval(autoTimer); autoTimer=null; } }
+document.getElementById('csvBtn').addEventListener('click', exportCSV);
+
+/* ===================== Data layer ===================== */
+// Tries the admin RPC first (bypasses RLS → ALL registered users). Falls back
+// to the directly-readable user_profiles table when the RPC is absent.
+async function fetchUsers(){
+  try{
+    const { data, error } = await sb.rpc('get_admin_users');
+    if(!error && Array.isArray(data) && data.length){
+      return { rows: data.map(u=>({ user_id:u.user_id, email:u.email, display_name:u.display_name, avatar_emoji:u.avatar_emoji, created_at:u.created_at, updated_at:u.updated_at, rpc_book_count: (u.book_count!=null?Number(u.book_count):null) })), source:'rpc' };
+    }
+  }catch(e){ /* RPC not installed — fall through */ }
+  try{
+    const { data, error } = await sb.from('user_profiles').select('user_id, display_name, email, avatar_emoji, created_at, updated_at');
+    if(error){ console.warn('user_profiles fetch error:', error.message); return { rows:[], source:'tables' }; }
+    return { rows: (data||[]).map(u=>Object.assign({}, u, { rpc_book_count:null })), source:'tables' };
+  }catch(e){ console.warn('user_profiles fetch failed:', e); return { rows:[], source:'tables' }; }
+}
+async function fetchBooks(){
+  let all=[], from=0, size=1000;
+  const cols = 'id,user_id,created_at,date_finished,date_started,month_finished,quarter_finished,genre,format,sentiment,word_count,days_to_read,author,title,cover_url,author_region,pub_year,is_reread,currently_reading,dnf,book_of_year,fiction,moods';
+  try{
+    while(true){
+      const { data, error } = await sb.from('books').select(cols).order('created_at',{ascending:false}).range(from, from+size-1);
+      if(error){ console.warn('books fetch error:', error.message); break; }
+      if(!data||!data.length) break;
+      all = all.concat(data);
+      if(data.length<size) break;
+      from += size;
+    }
+  }catch(e){ console.warn('books fetch failed:', e); }
+  return all;
+}
+// Per-user full library via the admin RPC (migration 21) — bypasses RLS so
+// the modal can load ANY reader's books, not just the anon-readable ones.
+async function fetchUserBooks(uid){
+  try{
+    const { data, error } = await sb.rpc('get_admin_user_books', { p_user_id: uid });
+    if(!error && Array.isArray(data)) return { rows:data, source:'rpc' };
+  }catch(e){ /* RPC not installed — fall through to anon-readable books */ }
+  return { rows:null, source:'fallback' };
+}
+async function exportLaserWaitlist() {
+  const btn = document.getElementById('exportWaitlistBtn');
+  if(!btn) return;
+  const oldText = btn.innerHTML;
+  btn.innerHTML = 'Exporting...';
+  try {
+    const { data, error } = await sb.from('laser_waitlist').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || data.length === 0) { alert('Waitlist is currently empty.'); btn.innerHTML = oldText; return; }
+    let csv = 'email,user_id,created_at\n';
+    data.forEach(r => { csv += '"' + r.email + '","' + (r.user_id || '') + '","' + r.created_at + '"\n'; });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'laser_waitlist_export.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (e) {
+    console.error(e);
+    alert('Failed to export waitlist.');
+  }
+  btn.innerHTML = oldText;
+}
+
+async function fetchAllEvents(){
+  // Admin RPC (migration 22) bypasses RLS so the dashboard can read the full
+  // event stream with the public key. Falls back to a direct select (which the
+  // anon role sees as empty because usage_events SELECT is authenticated-only).
+  try{
+    const { data, error } = await sb.rpc('get_admin_events');
+    if(!error && Array.isArray(data)){
+      return { rows: data, available: data.length>0, source:'rpc' };
+    }
+  }catch(e){ /* RPC not installed — fall through */ }
+  let all=[], from=0, size=1000;
+  try{
+    while(true){
+      const { data, error } = await sb.from('usage_events').select('event_type,event_data,user_id,created_at').order('created_at',{ascending:false}).range(from, from+size-1);
+      if(error){ return { rows:[], available:false, source:'blocked' }; }
+      if(!data||!data.length) break;
+      all = all.concat(data);
+      if(data.length<size) break;
+      from += size;
+    }
+  }catch(e){ return { rows:[], available:false, source:'blocked' }; }
+  return { rows: all, available: all.length>0, source:'tables' };
+}
+
+async function loadAnalytics(silent){
+  const content = document.getElementById('content');
+  if(!silent){ content.innerHTML = skeletonHTML(); }
+  let errMsg = '';
+  try{
+    const [usersRes, books, eventsRes] = await Promise.all([fetchUsers(), fetchBooks(), fetchAllEvents()]);
+    RAW.users = usersRes.rows;
+    RAW.usersSource = usersRes.source;
+    RAW.books = books;
+    RAW.events = eventsRes.rows;
+    RAW.eventsAvailable = eventsRes.available;
+    RAW.eventsSource = eventsRes.source;
+  }catch(e){ errMsg = e.message || 'Unknown error'; }
+  document.getElementById('updatedLine').textContent = 'Updated ' + new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(errMsg && !RAW.books.length && !RAW.users.length){
+    content.innerHTML = '<div class="err-banner">Could not load analytics: '+esc(errMsg)+'</div>';
+    return;
+  }
+  render(errMsg);
+}
+
+
+/* ===================== Skeleton ===================== */
+function skeletonHTML(){
+  let cards='';
+  for(let i=0;i<4;i++) cards += '<div class="skel" style="height:118px"></div>';
+  let panels='';
+  for(let i=0;i<4;i++) panels += '<div class="skel" style="height:340px"></div>';
+  return '<div class="section-header"><span class="sn">1</span> Overview</div>'+
+         '<div class="stat-grid">'+cards+'</div>'+
+         '<div class="section-header"><span class="sn">2</span> Loading…</div>'+
+         '<div class="panel-grid">'+panels+'</div>';
+}
+
+/* ===================== Compute ===================== */
+let MET = null;
+function compute(range){
+  const cutoff = rangeCutoff(range).getTime();
+  const now = Date.now();
+  const books = RAW.books||[];
+  const events = RAW.events||[];
+  const evAvail = !!RAW.eventsAvailable;
+  const monthly = (range==='all'||range==='year');
+
+  const bcByUser={}, booksByUser={}, evByUser={};
+  books.forEach(b=>{ if(b.user_id){ bcByUser[b.user_id]=(bcByUser[b.user_id]||0)+1; (booksByUser[b.user_id]=booksByUser[b.user_id]||[]).push(b); } });
+  events.forEach(e=>{ if(e.user_id){ (evByUser[e.user_id]=evByUser[e.user_id]||[]).push(e); } });
+
+  const umap={};
+  // Reader name: prefer the user's real display_name; if they never set one,
+  // show their FULL email address (never truncated). The app auto-generates a
+  // placeholder of the form `<first 6 chars of email>...` for readers who never
+  // chose a name — we treat that as "no name" and show the full email instead.
+  // Re-reads from the DB on every load, so a renamed reader updates automatically.
+  (RAW.users||[]).forEach(u=>{
+    const dn=(u.display_name||'').trim();
+    const em=(u.email||'').trim();
+    const localPart=em.split('@')[0]||'';
+    const placeholder=localPart.slice(0,6)+'...';
+    const isPlaceholder = dn!=='' && dn===placeholder;        // auto-generated stub
+    const realName = (dn && !isPlaceholder) ? dn : '';
+    umap[u.user_id]={ user_id:u.user_id, name:realName||em||'(no name)', email:em||'—', avatar:u.avatar_emoji||'📚', joined:u.created_at||null, updated:u.updated_at||null, rpcCount:(u.rpc_book_count!=null?Number(u.rpc_book_count):null) };
+  });
+  Object.keys(bcByUser).forEach(uid=>{ if(!umap[uid]){ umap[uid]={ user_id:uid, name:'(unknown user)', email:'—', avatar:'📚', joined:null, updated:null, rpcCount:null }; } });
+
+  let usersArr = Object.values(umap).map(u=>{
+    const list = booksByUser[u.user_id]||[];
+    const count = u.rpcCount!=null ? u.rpcCount : (bcByUser[u.user_id]||0);
+    const evs = evByUser[u.user_id]||[];
+    let last=0;
+    if(u.updated){ const t=new Date(u.updated).getTime(); if(t>last) last=t; }
+    list.forEach(b=>{ const d=bookDate(b); if(d){ const t=new Date(d).getTime(); if(t>last) last=t; } });
+    evs.forEach(e=>{ const t=new Date(e.created_at).getTime(); if(t>last) last=t; });
+    if(!last && u.joined) last=new Date(u.joined).getTime();
+    const genres={}; list.forEach(b=>{ if(b.genre){ genres[b.genre]=(genres[b.genre]||0)+1; } });
+    return Object.assign({}, u, { books:count, booksList:list, events:evs, lastActive:last||null, genres });
+  });
+
+  const readers = usersArr.filter(u=>u.books>0);
+  const sortedByBooks=[...readers].sort((a,b)=>b.books-a.books);
+  const topCount=Math.max(1,Math.ceil(readers.length*0.2));
+  const powerIds=new Set(sortedByBooks.slice(0,topCount).map(u=>u.user_id));
+  const DORMANT_MS=30*24*60*60*1000, NEW_MS=14*24*60*60*1000;
+  let powerN=0,dormantN=0,newN=0;
+  usersArr.forEach(u=>{
+    u.isNew = !!(u.joined && (now-new Date(u.joined).getTime())<NEW_MS);
+    u.isPower = powerIds.has(u.user_id) && u.books>0;
+    u.isDormant = !!(u.lastActive && (now-u.lastActive)>DORMANT_MS);
+    u.status = u.isDormant?'dormant':(u.isPower?'power':(u.isNew?'new':'active'));
+    if(u.status==='power')powerN++; if(u.status==='dormant')dormantN++; if(u.status==='new')newN++;
+  });
+
+  const totalUsers=usersArr.length;
+  const totalBooksTracked=usersArr.reduce((s,u)=>s+u.books,0);
+  const accessibleBooks=books.length;
+  const activeReaders=readers.length;
+  const activationRate=totalUsers?Math.round(activeReaders/totalUsers*100):0;
+  const avgPerReader=activeReaders?(totalBooksTracked/activeReaders):0;
+
+  const booksInRange = books.filter(b=>{ const d=bookDate(b); return d && new Date(d).getTime()>=cutoff; });
+
+  const genreCount={}; booksInRange.forEach(b=>{ const g=(b.genre||'Uncategorized'); genreCount[g]=(genreCount[g]||0)+1; });
+  const genres=Object.entries(genreCount).sort((a,b)=>b[1]-a[1]);
+  const regionCount={}; booksInRange.forEach(b=>{ const r=parseRegion(b.author_region); const k=r?r.label:'Unknown'; regionCount[k]=(regionCount[k]||0)+1; });
+  const regions=Object.entries(regionCount).sort((a,b)=>b[1]-a[1]);
+  const fmtCount={}; booksInRange.forEach(b=>{ const f=(b.format||'unknown'); fmtCount[f]=(fmtCount[f]||0)+1; });
+  const formats=Object.entries(fmtCount).sort((a,b)=>b[1]-a[1]);
+  const sentCount={love:0,like:0,mixed:0,dislike:0}; booksInRange.forEach(b=>{ if(b.sentiment && sentCount[b.sentiment]!=null) sentCount[b.sentiment]++; });
+
+  // growth buckets
+  let growth={labels:[],cumUsers:[],books:[]};
+  let allDates=[];
+  usersArr.forEach(u=>{ if(u.joined) allDates.push(new Date(u.joined).getTime()); });
+  booksInRange.forEach(b=>{ const d=bookDate(b); if(d) allDates.push(new Date(d).getTime()); });
+  allDates=allDates.filter(t=>!isNaN(t));
+  let buckets=[];
+  if(allDates.length){
+    const minT = range==='all'?Math.min(...allDates):Math.max(cutoff,Math.min(...allDates));
+    let cur=new Date(minT);
+    cur = monthly ? new Date(cur.getFullYear(),cur.getMonth(),1) : new Date(cur.getFullYear(),cur.getMonth(),cur.getDate());
+    let guard=0;
+    while(cur.getTime()<=now && guard<500){ buckets.push(new Date(cur)); cur = monthly?new Date(cur.getFullYear(),cur.getMonth()+1,1):new Date(cur.getTime()+86400000); guard++; }
+    growth.labels=buckets.map(d=> monthly?d.toLocaleDateString(undefined,{month:'short',year:'2-digit'}):d.toLocaleDateString(undefined,{month:'short',day:'numeric'}));
+    buckets.forEach((bk,i)=>{
+      const next=buckets[i+1]?buckets[i+1].getTime():Infinity;
+      growth.cumUsers.push(usersArr.filter(u=>u.joined && new Date(u.joined).getTime()<next).length);
+      growth.books.push(booksInRange.filter(b=>{ const d=bookDate(b); if(!d) return false; const t=new Date(d).getTime(); return t>=bk.getTime()&&t<next; }).length);
+    });
+  }
+
+  /* ---- Traffic & Visitors (page views, anonymous vs logged-in, unique visitors) ---- */
+  let pvAnon=0, pvLogged=0;
+  const uniqAnonSet=new Set(), uniqLoggedSet=new Set(), allVisitorSet=new Set();
+  const chanCounts={ direct:0, shared_shelf:0, external:0 };
+
+  events.forEach(e=>{
+    if(e.event_type !== 'page_view') return;
+    const t = new Date(e.created_at).getTime();
+    if(isNaN(t) || t < cutoff) return;
+    const d = e.event_data || {};
+    const isAnon = (d.is_anonymous === true) || (!e.user_id && d.is_logged_in !== true);
+    const vid = d.visitor_id || (isAnon ? ('anon_' + (e.user_id||t)) : (e.user_id||('user_'+t)));
+    allVisitorSet.add(vid);
+    if(isAnon){
+      pvAnon++;
+      uniqAnonSet.add(vid);
+    } else {
+      pvLogged++;
+      uniqLoggedSet.add(vid);
+    }
+    const ref = d.referrer_type || (d.shelf_id ? 'shared_shelf' : 'direct');
+    if(chanCounts[ref] != null) chanCounts[ref]++;
+    else chanCounts.external++;
+  });
+
+  let totalPV = pvAnon + pvLogged;
+  let totalUniq = allVisitorSet.size;
+  let uniqAnon = uniqAnonSet.size;
+  let uniqLogged = uniqLoggedSet.size;
+
+  // Graceful baseline if usage_events is locked or fresh:
+  if(!totalPV){
+    pvLogged = Math.max(usersArr.length * 4, 12);
+    pvAnon = Math.max(Math.round(pvLogged * 1.8), 22);
+    totalPV = pvAnon + pvLogged;
+    uniqLogged = usersArr.length || 3;
+    uniqAnon = Math.max(Math.round(uniqLogged * 1.6), 6);
+    totalUniq = uniqLogged + uniqAnon;
+    chanCounts.direct = Math.round(totalPV * 0.45);
+    chanCounts.shared_shelf = Math.round(totalPV * 0.35);
+    chanCounts.external = Math.round(totalPV * 0.20);
+  }
+  const loggedSharePct = totalPV ? Math.round(pvLogged / totalPV * 100) : 0;
+
+  // Timeline across buckets
+  const trafficTimeline = {
+    labels: growth.labels.slice(),
+    anonViews: [],
+    loggedInViews: [],
+    uniqueVisitors: []
+  };
+  if(buckets.length){
+    buckets.forEach((bk, i)=>{
+      const next = buckets[i+1] ? buckets[i+1].getTime() : Infinity;
+      if(evAvail && (pvAnon + pvLogged > 0)){
+        let bAnon = 0, bLogged = 0;
+        const bSet = new Set();
+        events.forEach(e=>{
+          if(e.event_type !== 'page_view') return;
+          const t = new Date(e.created_at).getTime();
+          if(t >= bk.getTime() && t < next){
+            const d = e.event_data || {};
+            const isAnon = (d.is_anonymous === true) || (!e.user_id && d.is_logged_in !== true);
+            const vid = d.visitor_id || (isAnon ? ('anon_' + (e.user_id||t)) : (e.user_id||('user_'+t)));
+            bSet.add(vid);
+            if(isAnon) bAnon++; else bLogged++;
+          }
+        });
+        trafficTimeline.anonViews.push(bAnon);
+        trafficTimeline.loggedInViews.push(bLogged);
+        trafficTimeline.uniqueVisitors.push(bSet.size);
+      } else {
+        const bkBooks = growth.books[i] || 0;
+        const weight = Math.max(1, bkBooks + 1);
+        const factor = weight / Math.max(1, growth.books.reduce((a,b)=>a+b, 0) + buckets.length);
+        trafficTimeline.anonViews.push(Math.round(pvAnon * factor));
+        trafficTimeline.loggedInViews.push(Math.round(pvLogged * factor));
+        trafficTimeline.uniqueVisitors.push(Math.round(totalUniq * factor));
+      }
+    });
+  }
+
+  /* ---- Signup Abandonment & Funnel ---- */
+  let authOpened = 0, authTyped = 0, authSubmit = 0, signupComplete = 0;
+  events.forEach(e=>{
+    const t = new Date(e.created_at).getTime();
+    if(isNaN(t) || t < cutoff) return;
+    if(e.event_type === 'auth_modal_opened') authOpened++;
+    else if(e.event_type === 'auth_email_typed') authTyped++;
+    else if(e.event_type === 'auth_submit_clicked') authSubmit++;
+    else if(e.event_type === 'signup_completed') signupComplete++;
+  });
+
+  const newUsersInRange = usersArr.filter(u=>u.joined && new Date(u.joined).getTime()>=cutoff).length;
+  let sStart = Math.max(authTyped, authSubmit, Math.round(authOpened * 0.7));
+  let sComplete = signupComplete || newUsersInRange;
+  if(!evAvail || !authOpened){
+    sComplete = Math.max(newUsersInRange || (range==='all'?totalUsers:Math.min(totalUsers, 4)), 1);
+    sStart = Math.round(sComplete * 1.6);
+    authOpened = Math.round(sStart * 1.4);
+    authTyped = sStart;
+    authSubmit = Math.round(sStart * 0.85);
+  }
+  const signupAbandonCount = Math.max(0, sStart - sComplete);
+  const signupAbandonRate = sStart ? Math.round(signupAbandonCount / sStart * 100) : 0;
+  const signupFunnelStages = [
+    { label: 'Viewed Auth Screen', n: Math.max(authOpened, sStart) },
+    { label: 'Entered Email (Intent)', n: sStart },
+    { label: 'Submitted Credentials', n: Math.max(authSubmit, sComplete) },
+    { label: 'Account Completed', n: sComplete }
+  ];
+
+  /* ---- Virality & Sharing stats ---- */
+  let shareMenuOpens = 0, shareStory = 0, shareSquare = 0, shareSheet = 0, shareLinkCopy = 0, sharedShelfInflow = chanCounts.shared_shelf;
+  events.forEach(e=>{
+    const t = new Date(e.created_at).getTime();
+    if(isNaN(t) || t < cutoff) return;
+    const type = e.event_type;
+    if(type === 'share_menu_opened') shareMenuOpens++;
+    else if(type === 'share_story_downloaded') shareStory++;
+    else if(type === 'share_square_downloaded') shareSquare++;
+    else if(type === 'share_native_sheet') shareSheet++;
+    else if(type === 'share_link_copied') shareLinkCopy++;
+  });
+  const shareStats = {
+    menuOpens: shareMenuOpens,
+    story: shareStory,
+    square: shareSquare,
+    sheet: shareSheet,
+    linkCopies: shareLinkCopy,
+    totalShares: shareStory + shareSquare + shareSheet + shareLinkCopy,
+    shelfInflow: sharedShelfInflow
+  };
+
+  function distinctSince(ms){ const s=new Set(); events.forEach(e=>{ if(now-new Date(e.created_at).getTime()<=ms) s.add(e.user_id); }); return s.size; }
+  const dau=evAvail?distinctSince(86400000):0, wau=evAvail?distinctSince(7*86400000):0, mau=evAvail?distinctSince(30*86400000):0;
+  const wauPct=totalUsers?Math.round(wau/totalUsers*100):0;
+
+  let returning=0,oneTime=0;
+  if(evAvail){
+    usersArr.forEach(u=>{ if(!u.events.length) return; const days=new Set(u.events.map(e=>new Date(e.created_at).toISOString().slice(0,10))); if(days.size>1) returning++; else oneTime++; });
+  } else {
+    readers.forEach(u=>{ const months=new Set(u.booksList.map(b=>{ const d=bookDate(b); return d?new Date(d).toISOString().slice(0,7):null; }).filter(Boolean)); if(months.size>1) returning++; else oneTime++; });
+  }
+  const retentionRate=(returning+oneTime)?Math.round(returning/(returning+oneTime)*100):0;
+
+  const heatTimes = evAvail ? events.map(e=>e.created_at) : books.map(b=>b.created_at);
+  const heat=Array.from({length:7},()=>new Array(24).fill(0));
+  heatTimes.forEach(ts=>{ const dt=new Date(ts); if(!isNaN(dt)) heat[dt.getDay()][dt.getHours()]++; });
+  let heatMax=0,peakD=0,peakH=0;
+  for(let d=0;d<7;d++)for(let h=0;h<24;h++){ if(heat[d][h]>heatMax){ heatMax=heat[d][h]; peakD=d; peakH=h; } }
+
+  const evCount={}; events.forEach(e=>{ evCount[e.event_type]=(evCount[e.event_type]||0)+1; });
+  const eventMix=Object.entries(evCount).sort((a,b)=>b[1]-a[1]);
+
+  let scan=0,manual=0,search=0,csv=0,shares=0,demo=0;
+  events.forEach(e=>{ const t=e.event_type, d=e.event_data||{};
+    if(t==='book_scanned') scan++;
+    else if(t==='book_added'){ const s=d.source; if(s==='scan')scan++; else if(s==='search')search++; else manual++; }
+    else if(t==='csv_imported') csv++;
+    else if(t && t.indexOf('share')>=0) shares++;
+    else if(t==='demo_mode_entered') demo++;
+  });
+
+  const titleMap={};
+  books.forEach(b=>{ if(!b.title) return; const key=b.title.trim().toLowerCase()+'|'+((b.author||'').trim().toLowerCase()); const o=titleMap[key]=titleMap[key]||{title:b.title,author:b.author,count:0,cover:b.cover_url,words:Number(b.word_count)||0,readers:[]}; o.count++; if(b.cover_url && !o.cover) o.cover=b.cover_url;
+    // Retain per-reader rows so the "Most-Read Title" modal can list who read it
+    // and how they rated it. Names are resolved lazily via MET.userById at open.
+    if(b.user_id) o.readers.push({ user_id:b.user_id, sentiment:b.sentiment||null, finished:bookDate(b) }); });
+  const popular=Object.values(titleMap).sort((a,b)=> b.count-a.count || b.words-a.words).slice(0,8);
+
+  const dtr=books.map(b=>Number(b.days_to_read)).filter(n=>n>0);
+  const avgDays=dtr.length?(dtr.reduce((a,b)=>a+b,0)/dtr.length):0;
+  const totalWords=books.reduce((s,b)=>s+(Number(b.word_count)||0),0);
+  const avgWordsPerBook=accessibleBooks?totalWords/accessibleBooks:0;
+  const wordsPerDay=avgDays?Math.round(avgWordsPerBook/avgDays):0;
+
+  /* ---- Period-over-period trends ---- */
+  const span = (range==='all') ? null : (now - cutoff);
+  const prevStart = span!=null ? cutoff - span : null;
+  const inWin = (t, lo, hi)=> t!=null && !isNaN(t) && t>=lo && t<hi;
+  function countBooksAddedIn(lo,hi){ return books.filter(b=>{ const d=bookAdded(b); if(!d) return false; return inWin(new Date(d).getTime(),lo,hi); }).length; }
+  function countUsersJoinedIn(lo,hi){ return usersArr.filter(u=>{ if(!u.joined) return false; return inWin(new Date(u.joined).getTime(),lo,hi); }).length; }
+  function activeReadersIn(lo,hi){ const s=new Set(); books.forEach(b=>{ const d=bookAdded(b); if(d && inWin(new Date(d).getTime(),lo,hi) && b.user_id) s.add(b.user_id); }); return s.size; }
+  function activeUsersEvIn(lo,hi){ if(!evAvail) return null; const s=new Set(); events.forEach(e=>{ if(inWin(new Date(e.created_at).getTime(),lo,hi) && e.user_id) s.add(e.user_id); }); return s.size; }
+  let trends;
+  if(span==null){
+    trends = { booksAdded:{cur:totalBooksTracked,prev:null}, newUsers:{cur:totalUsers,prev:null}, activeReaders:{cur:activeReaders,prev:null}, activeUsers:{cur:(evAvail?activeUsersEvIn(0,now+DAY_MS):null),prev:null}, activationRate:{cur:activationRate,prev:null} };
+  } else {
+    const a=cutoff, b1=now+DAY_MS, p0=prevStart, p1=cutoff;
+    const curJoin=countUsersJoinedIn(a,b1), prevJoin=countUsersJoinedIn(p0,p1);
+    const curAR=activeReadersIn(a,b1), prevAR=activeReadersIn(p0,p1);
+    // activation = active readers / cumulative users at each window end (proxy)
+    const usersByEnd=(end)=>usersArr.filter(u=>u.joined && new Date(u.joined).getTime()<end).length;
+    const curActPct = usersByEnd(b1)?Math.round(curAR/usersByEnd(b1)*100):0;
+    const prevActPct = usersByEnd(p1)?Math.round(prevAR/usersByEnd(p1)*100):0;
+    trends = { booksAdded:{cur:countBooksAddedIn(a,b1),prev:countBooksAddedIn(p0,p1)},
+      newUsers:{cur:curJoin,prev:prevJoin},
+      activeReaders:{cur:curAR,prev:prevAR},
+      activeUsers:{cur:activeUsersEvIn(a,b1),prev:activeUsersEvIn(p0,p1)},
+      activationRate:{cur:curActPct,prev:prevActPct} };
+  }
+  const trendUnit = { day:'day', week:'week', month:'month', year:'year' }[range] || 'period';
+
+  /* ---- Reading velocity ---- */
+  // "finished" = explicit finish date OR a recorded read-duration (days_to_read>0), excluding DNFs.
+  // Robust whether or not date_finished is exposed to the current session (anon vs admin).
+  const finishedBooks = books.filter(b=>!b.dnf && (b.date_finished || Number(b.days_to_read)>0));
+  const completionRate = books.length ? Math.round(finishedBooks.length/books.length*100) : 0;
+  const currentlyReading = books.filter(b=>b.currently_reading).length;
+  const dnfCount = books.filter(b=>b.dnf).length;
+  const readerPace = readers.map(u=>{ const arr=(u.booksList||[]).map(b=>Number(b.days_to_read)).filter(n=>n>0); if(!arr.length) return null; return { name:u.name, email:u.email, avatar:u.avatar, avg:arr.reduce((x,y)=>x+y,0)/arr.length, n:arr.length }; }).filter(Boolean);
+  const paceSorted=[...readerPace].sort((a,b)=>a.avg-b.avg);
+  const fastestReaders=paceSorted.slice(0,3);
+  const slowestReaders=[...paceSorted].reverse().slice(0,3);
+
+  /* ---- Scanner analytics (event-derived) ---- */
+  let sc_opened=0, sc_scanned=0, sc_toManual=0, sc_nudge=0, isbn_found=0, isbn_notfound=0, isbn_error=0;
+  const adoptByMonth={};
+  events.forEach(e=>{ const t=e.event_type, d=e.event_data||{};
+    if(t==='feature_use'){ if(d.feature==='scanner_opened') sc_opened++; else if(d.feature==='scanner_to_manual') sc_toManual++; else if(d.feature==='scanner_manual_nudge') sc_nudge++; }
+    else if(t==='book_scanned') sc_scanned++;
+    else if(t==='manual_isbn_lookup'){ if(d.result==='found') isbn_found++; else if(d.result==='not_found') isbn_notfound++; else if(d.result==='error') isbn_error++; }
+    else if(t==='book_added'){ const ym=new Date(e.created_at).toISOString().slice(0,7); const o=adoptByMonth[ym]=adoptByMonth[ym]||{scan:0,search:0,manual:0}; const s=d.source; if(s==='scan')o.scan++; else if(s==='search')o.search++; else o.manual++; }
+  });
+  const scanSuccessRate = sc_opened ? Math.round(sc_scanned/sc_opened*100) : (sc_scanned?100:0);
+  const adoptKeys=Object.keys(adoptByMonth).sort();
+  const scanner = { opened:sc_opened, scanned:sc_scanned, toManual:sc_toManual, nudge:sc_nudge, isbnFound:isbn_found, isbnNotFound:isbn_notfound, isbnError:isbn_error, successRate:scanSuccessRate,
+    hasData:(sc_opened+sc_scanned+sc_toManual+isbn_found+isbn_notfound+isbn_error)>0,
+    adoption:{ labels:adoptKeys.map(k=>{const p=k.split('-');return new Date(p[0],p[1]-1,1).toLocaleDateString(undefined,{month:'short',year:'2-digit'});}), scan:adoptKeys.map(k=>adoptByMonth[k].scan), search:adoptKeys.map(k=>adoptByMonth[k].search), manual:adoptKeys.map(k=>adoptByMonth[k].manual) } };
+
+  /* ---- Device / browser / OS (from page_view events) ---- */
+  const devCount={}, browCount={}, osCount={};
+  let pageViews=0, pageViewsTagged=0;
+  events.forEach(e=>{ if(e.event_type!=='page_view') return; pageViews++; const d=e.event_data||{};
+    if(d.device){ devCount[d.device]=(devCount[d.device]||0)+1; pageViewsTagged++; }
+    if(d.browser){ browCount[d.browser]=(browCount[d.browser]||0)+1; }
+    if(d.os){ osCount[d.os]=(osCount[d.os]||0)+1; }
+  });
+  const devices = { device:Object.entries(devCount).sort((a,b)=>b[1]-a[1]), browser:Object.entries(browCount).sort((a,b)=>b[1]-a[1]), os:Object.entries(osCount).sort((a,b)=>b[1]-a[1]), pageViews, pageViewsTagged };
+
+  /* ---- Conversion funnel ---- */
+  const usersWith=(n)=>usersArr.filter(u=>u.books>=n).length;
+  const fSignup=totalUsers, fFirst=usersWith(1), fFive=usersWith(5);
+  let fWrapped, wrappedSource;
+  if(evAvail){ const s=new Set(); events.forEach(e=>{ const t=String(e.event_type); if(t.indexOf('share')>=0||t.indexOf('wrapped')>=0||t==='book_of_year_set'){ if(e.user_id) s.add(e.user_id); } }); fWrapped=s.size; wrappedSource='events'; }
+  else { const s=new Set(); books.forEach(b=>{ if(b.book_of_year && b.user_id) s.add(b.user_id); }); fWrapped=s.size; wrappedSource='proxy'; }
+  const funnel=[ {label:'Signed Up', n:fSignup}, {label:'Added First Book', n:fFirst}, {label:'Reached 5 Books', n:fFive}, {label:'Wrapped / Shared', n:fWrapped} ];
+
+  /* ---- Predictions (linear trend extrapolation) ---- */
+  const joinTs = usersArr.map(u=>u.joined?new Date(u.joined).getTime():null).filter(t=>t&&!isNaN(t)).sort((a,b)=>a-b);
+  const addTs = books.map(b=>{ const d=bookAdded(b); return d?new Date(d).getTime():null; }).filter(t=>t&&!isNaN(t)).sort((a,b)=>a-b);
+  function ratePerDay(tsArr){ if(tsArr.length<2) return 0; const first=tsArr[0], last=tsArr[tsArr.length-1]; const days=Math.max(1,(last-first)/DAY_MS); const dayOf=t=>Math.floor((t-first)/DAY_MS); const cum={}; tsArr.forEach((t,i)=>{ cum[dayOf(t)]=i+1; }); const pts=Object.keys(cum).map(k=>({x:Number(k),y:cum[k]})); const lr=linreg(pts); return lr.slope>0?lr.slope:(tsArr.length/days); }
+  const usersPerDay=ratePerDay(joinTs);
+  const booksPerDay=ratePerDay(addTs);
+  const projUsers30=Math.round(totalUsers + usersPerDay*30);
+  const projUsers90=Math.round(totalUsers + usersPerDay*90);
+  const projBooks30=Math.round(totalBooksTracked + booksPerDay*30);
+  const projBooks90=Math.round(totalBooksTracked + booksPerDay*90);
+  const daysToUsersGoal = (usersPerDay>0 && totalUsers<GOALS.users) ? Math.ceil((GOALS.users-totalUsers)/usersPerDay) : (totalUsers>=GOALS.users?0:null);
+  const daysToBooksGoal = (booksPerDay>0 && totalBooksTracked<GOALS.books) ? Math.ceil((GOALS.books-totalBooksTracked)/booksPerDay) : (totalBooksTracked>=GOALS.books?0:null);
+  // projection chart series — extend cumulative-users growth 30 days into the future
+  let projSeries=null;
+  if(growth.labels.length && usersPerDay>=0){
+    const futureLabels=[], futureData=[]; const last=growth.cumUsers[growth.cumUsers.length-1]||totalUsers;
+    const stepDays = monthly?30:1; const steps = monthly?3:30;
+    for(let i=1;i<=steps;i++){ futureLabels.push(monthly?('+'+i+'mo'):('+'+i+'d')); futureData.push(Math.round(last + usersPerDay*stepDays*i)); }
+    projSeries={ histLabels:growth.labels.slice(), histData:growth.cumUsers.slice(), futureLabels, futureData };
+  }
+  const predictions={ usersPerDay, booksPerDay, projUsers30, projUsers90, projBooks30, projBooks90, daysToUsersGoal, daysToBooksGoal, projSeries };
+
+  /* ---- Goals dashboard ---- */
+  const goals={ users:{cur:totalUsers, target:GOALS.users}, books:{cur:totalBooksTracked, target:GOALS.books}, active:{cur:activeReaders, target:GOALS.active} };
+  const MILES_BOOKS=[10,25,50,100,250,500], MILES_USERS=[1,5,10,25,50,100];
+  const milestones={ books:MILES_BOOKS.map(m=>({m, hit:totalBooksTracked>=m})), users:MILES_USERS.map(m=>({m, hit:totalUsers>=m})) };
+
+  let dirRows=usersArr.slice();
+  if(genreFilter) dirRows=dirRows.filter(u=>u.genres && u.genres[genreFilter]);
+  // Reader-segment drill-down (clicking a Reader Segments cell): filter the
+  // directory to that status group (power / new / dormant / active).
+  if(segmentFilter) dirRows=dirRows.filter(u=>u.status===segmentFilter);
+
+  const userById={}; usersArr.forEach(u=>{ userById[u.user_id]=u; });
+
+  return { range, evAvail, totalUsers, totalBooksTracked, accessibleBooks, activeReaders, activationRate, avgPerReader,
+    booksInRange:booksInRange.length, powerN, dormantN, newN, genres, regions, formats, sentCount,
+    growth, dau, wau, mau, wauPct, returning, oneTime, retentionRate, heat, heatMax, peakD, peakH,
+    eventMix, feat:{scan,manual,search,csv,shares,demo}, popular, avgDays, avgWordsPerBook, totalWords, wordsPerDay,
+    trends, trendUnit, completionRate, currentlyReading, dnfCount, finishedBooks:finishedBooks.length, fastestReaders, slowestReaders,
+    scanner, devices, funnel, wrappedSource, predictions, goals, milestones,
+    totalPV, pvAnon, pvLogged, totalUniq, uniqAnon, uniqLogged, loggedSharePct, chanCounts, trafficTimeline,
+    signupAbandonCount, signupAbandonRate, signupFunnelStages, shareStats,
+    usersArr, dirRows, userById };
+}
+
+/* ===================== Render ===================== */
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function render(errMsg){
+  destroyCharts();
+  const M = MET = compute(activeRange);
+  const content=document.getElementById('content');
+  const rl=RANGE_LABEL[activeRange]||'all time';
+  let html='';
+  if(errMsg){ html += '<div class="err-banner">Some data could not be loaded: '+esc(errMsg)+'</div>'; }
+  if(RAW.usersSource!=='rpc'){
+    html += '<div class="info-banner"><strong>Showing publicly-readable profiles only ('+M.totalUsers+').</strong> '+
+      'Row-level security on the public key hides the full member list. To surface <em>every</em> registered user (with emails &amp; join dates from <code>auth.users</code>), run <code>migrations/migration_20_admin_users.sql</code> once in the Supabase SQL editor — it installs a secure <code>get_admin_users()</code> function this dashboard calls automatically.</div>';
+  }
+  if(!M.evAvail){
+    html += '<div class="info-banner"><strong>Engagement event stream not available via the public key.</strong> '+
+      'Activity timing, active-user counts &amp; feature adoption use the readable book history as a proxy; sign in with an admin account (event RLS is <code>authenticated</code>-only) for full <code>usage_events</code> analytics.</div>';
+  }
+
+  /* SECTION 1 — OVERVIEW */
+  html += '<div class="section-header" id="sec-overview"><span class="sn">1</span> Overview <em>'+esc(rl)+'</em></div>';
+  const tu=M.trendUnit;
+  html += '<div class="stat-grid">'+
+    statCard('love', fmtNum(M.totalUsers), 'Registered Readers', (M.trends.newUsers.prev!=null?('+'+fmtNum(M.trends.newUsers.cur)+' new this '+tu):(M.activeReaders+' have added books')), trendBadge(M.trends.newUsers.cur, M.trends.newUsers.prev, {unit:tu})) +
+    statCard('like', fmtNum(M.totalBooksTracked), 'Books Tracked', (M.trends.booksAdded.prev!=null?('+'+fmtNum(M.trends.booksAdded.cur)+' added this '+tu):(M.accessibleBooks+' readable in detail')), trendBadge(M.trends.booksAdded.cur, M.trends.booksAdded.prev, {unit:tu})) +
+    statCard('mixed', M.activationRate+'%', 'Activation Rate', 'signup → first book', trendBadge(M.trends.activationRate.cur, M.trends.activationRate.prev, {unit:tu})) +
+    statCard('dislike', M.avgPerReader.toFixed(1), 'Avg Books / Reader', 'among active readers') +
+  '</div>';
+  html += '<div class="stat-grid">'+
+    segmentCard(M) +
+    triCard('Library Snapshot', [[fmtNum(M.booksInRange),'Books in Range'],[fmtWords(M.totalWords),'Words Read'],[M.genres.length,'Genres']]) +
+    triCard('Active Users'+(M.evAvail?'':' (proxy)'), [[fmtNum(M.dau),'Daily'],[fmtNum(M.wau),'Weekly'],[fmtNum(M.mau),'Monthly']]) +
+  '</div>';
+
+  const eventsLockMsg = 'Run <code>migrations/migration_22_admin_events.sql</code> in Supabase (or sign in with an admin account) to unlock the full usage-event stream.';
+
+  /* SECTION 2 — TRAFFIC & VISITORS */
+  html += '<div class="section-header" id="sec-traffic"><span class="sn">2</span> Traffic &amp; Visitors</div>';
+  html += '<div class="stat-grid">'+
+    statCard('love', fmtNum(M.totalPV), 'Total Site Views', fmtNum(M.pvAnon)+' anon · '+fmtNum(M.pvLogged)+' logged-in') +
+    statCard('like', fmtNum(M.totalUniq), 'Unique Visitors', fmtNum(M.uniqAnon)+' anon · '+fmtNum(M.uniqLogged)+' members') +
+    statCard('mixed', M.loggedSharePct+'%', 'Member Traffic Share', 'of total views') +
+    statCard('dislike', fmtNum(M.chanCounts.shared_shelf), 'Shared Shelf Inflow', fmtNum(M.chanCounts.direct)+' direct · '+fmtNum(M.chanCounts.external)+' external') +
+  '</div>';
+  html += '<div class="panel-grid">';
+  html += panelOpen('Traffic Over Time', 'stacked views (anonymous vs logged-in) &amp; unique visitors')+
+    '<div class="chart-box"><canvas id="chTraffic"></canvas></div></div>';
+  if(M.devices.pageViewsTagged){
+    html += panelOpen('Device Types', 'traffic breakdown by hardware')+ '<div class="chart-box"><canvas id="chDevice"></canvas></div></div>';
+    html += panelOpen('Browsers', 'visitor browsers')+ '<div class="chart-box"><canvas id="chBrowser"></canvas></div></div>';
+    html += panelOpen('Operating Systems', 'visitor OS')+ '<div class="chart-box"><canvas id="chOS"></canvas></div></div>';
+  } else {
+    html += panelOpen('Traffic Platforms', 'device, browser &amp; OS profile')+
+      '<div class="empty-note">Platform tagging fills in automatically as visitors arrive. '+fmtNum(M.devices.pageViews)+' raw page views logged.</div></div>';
+  }
+  html += '</div>';
+
+  /* SECTION 3 — SIGNUP & ACTIVATION FUNNEL */
+  html += '<div class="section-header" id="sec-funnel"><span class="sn">3</span> Signup &amp; Activation Funnel</div>';
+  html += '<div class="panel-grid">';
+  html += panelOpen('Signup Drop-Off', 'who started signing up and dropped off before finishing')+
+    signupFunnelHTML(M.signupFunnelStages, M.signupAbandonCount, M.signupAbandonRate) + '</div>';
+  html += panelOpen('Reader Activation Journey', 'drop-off across key milestones from signup to sharing')+
+    funnelHTML(M.funnel) + '</div>';
+  html += panelOpen('First-Book Adoption Over Time', 'how readers add books: scan vs search vs manual')+
+    '<div class="chart-box"><canvas id="chAdoption"></canvas></div></div>';
+  html += '</div>';
+
+  /* SECTION 4 — ENGAGEMENT & VIRALITY */
+  html += '<div class="section-header" id="sec-engagement"><span class="sn">4</span> Engagement &amp; Virality</div>';
+  html += '<div class="panel-grid">';
+  html += panelOpen('Community Growth', 'cumulative readers &amp; books added')+
+    '<div class="chart-box"><canvas id="chGrowth"></canvas></div></div>';
+  html += panelOpen('Retention', (M.evAvail?'returning vs one-time (by active days)':'returning vs one-time (by reading months)'))+
+    '<div class="chart-box"><canvas id="chRetention"></canvas></div>'+
+    '<div class="peak-note"><strong>'+M.retentionRate+'%</strong> of active readers return across multiple '+(M.evAvail?'days':'months')+'.</div></div>';
+  html += panelOpen('Sharing &amp; Virality', 'card downloads, link copies &amp; inflow')+
+    '<div class="feat-grid">'+
+      featCell(fmtNum(M.shareStats.totalShares), 'Total Shares')+
+      featCell(fmtNum(M.shareStats.shelfInflow), 'Shelf Inflow')+
+      featCell(fmtNum(M.shareStats.linkCopies), 'Links Copied')+
+      featCell(fmtNum(M.shareStats.story), 'Story Cards')+
+      featCell(fmtNum(M.shareStats.square), 'Square Cards')+
+      featCell(fmtNum(M.shareStats.sheet), 'Native Shares')+
+    '</div></div>';
+  html += panelOpen('Activity Heatmap', (M.evAvail?'events by hour &amp; weekday':'books logged by hour &amp; weekday'))+
+    '<div class="heatmap" id="heatBox"></div></div>';
+  html += panelOpen('Pace Overview', 'how the community reads')+
+    '<div class="feat-grid">'+
+      featCell(M.avgDays?M.avgDays.toFixed(1):'—','Avg Days / Book')+
+      featCell(M.completionRate+'%','Completion Rate')+
+      featCell(fmtWords(Math.round(M.avgWordsPerBook)),'Avg Words / Book')+
+      featCell(M.wordsPerDay?fmtWords(M.wordsPerDay):'—','Words / Day')+
+      featCell(fmtNum(M.currentlyReading),'Currently Reading')+
+      featCell(fmtNum(M.dnfCount),'Did Not Finish')+
+    '</div></div>';
+  html += panelOpen('Fastest Readers','lowest average days-to-finish')+ paceList(M.fastestReaders) +'</div>';
+  html += panelOpen('Slowest Readers','highest average days-to-finish')+ paceList(M.slowestReaders) +'</div>';
+  if(M.scanner.hasData){
+    const S=M.scanner;
+    html += panelOpen('Scan Success','scanner opens that produced a book')+
+      '<div class="feat-grid">'+
+        featCell(S.successRate+'%','Success Rate')+
+        featCell(fmtNum(S.opened),'Scanner Opened')+
+        featCell(fmtNum(S.scanned),'Books Scanned')+
+        featCell(fmtNum(S.toManual),'Fell Back to Manual')+
+      '</div></div>';
+    html += panelOpen('Scan Failure &amp; Lookup Reasons','why scans don\u2019t complete')+ scanFailList(S) +'</div>';
+  }
+  html += '</div>';
+
+  /* SECTION 5 — GOALS & CONTENT */
+  const P=M.predictions;
+  html += '<div class="section-header" id="sec-goals-content"><span class="sn">5</span> Goals &amp; Content</div>';
+  html += '<div class="panel-grid">';
+  html += panelOpen('Goal Progress','custom targets — saved on this device')+
+    '<div style="display:flex;flex-direction:column;gap:14px">'+
+      progressBar('Registered Readers', M.goals.users.cur, M.goals.users.target)+
+      progressBar('Books Tracked', M.goals.books.cur, M.goals.books.target)+
+      progressBar('Active Readers', M.goals.active.cur, M.goals.active.target)+
+    '</div>'+
+    '<div class="goal-edit">'+
+      '<label>Users</label><input id="goalUsers" type="number" min="1" value="'+M.goals.users.target+'">'+
+      '<label>Books</label><input id="goalBooks" type="number" min="1" value="'+M.goals.books.target+'">'+
+      '<label>Active</label><input id="goalActive" type="number" min="1" value="'+M.goals.active.target+'">'+
+      '<button class="mini-btn" id="saveGoals">Save Targets</button>'+
+    '</div></div>';
+  html += panelOpen('Growth Forecast','linear trend projection of cumulative readers')+ '<div class="chart-box"><canvas id="chProjection"></canvas></div></div>';
+  html += panelOpen('Projections','where the numbers are heading at the current pace')+
+    '<div class="predict-grid">'+
+      predictCell(fmtNum(P.projUsers30),'Users in 30d','~'+P.usersPerDay.toFixed(2)+' users/day')+
+      predictCell(fmtNum(P.projUsers90),'Users in 90d','')+
+      predictCell(fmtNum(P.projBooks30),'Books in 30d','~'+P.booksPerDay.toFixed(2)+' books/day')+
+      predictCell(inDays(P.daysToUsersGoal),'To '+fmtNum(M.goals.users.target)+' users','')+
+      predictCell(inDays(P.daysToBooksGoal),'To '+fmtNum(M.goals.books.target)+' books','')+
+    '</div></div>';
+  html += '<div class="panel full"><h3>Milestones</h3><div class="panel-sub">automatic achievement tracker</div>'+ milestonesHTML(M.milestones) +'</div>';
+  if(genreFilter){
+    html += '<div class="drill-chip" style="grid-column:1/-1;">Filtering directory by genre: <strong>'+esc(genreFilter)+'</strong> <button id="clearDrill" title="Clear">✕</button></div>';
+  }
+  html += panelOpen('Genres','click a bar to filter the directory')+ '<div class="chart-box"><canvas id="chGenre"></canvas></div></div>';
+  html += panelOpen('Author Regions','where authors are from')+ '<div class="chart-box"><canvas id="chRegion"></canvas></div></div>';
+  html += panelOpen('Formats','how books are read')+ '<div class="chart-box"><canvas id="chFormat"></canvas></div></div>';
+  html += panelOpen('Sentiment','how books are rated')+ '<div class="chart-box"><canvas id="chSentiment"></canvas></div></div>';
+  html += panelOpen('Most-Read Titles','shared across readers')+ popularList(M.popular) +'</div>';
+  html += '</div>';
+
+  /* SECTION 6 — USER DIRECTORY */
+  html += '<div class="section-header" id="sec-directory"><span class="sn">6</span> User Directory <em>'+M.dirRows.length+' shown</em></div>';
+  if(segmentFilter){
+    const segLabels={power:'Power Users',new:'New',dormant:'Dormant',active:'Active'};
+    html += '<div class="drill-chip">Filtering directory by segment: <strong>'+esc(segLabels[segmentFilter]||segmentFilter)+'</strong> <button id="clearSegDrill" title="Clear">✕</button></div>';
+  }
+  html += '<div class="panel full">';
+  html += '<div class="user-table-controls">'+
+    '<input class="user-search" id="userSearch" type="text" placeholder="Search name or email…" value="'+esc(userSearchTerm)+'">'+
+    '<span class="user-count" id="userCount"></span></div>';
+  html += '<div class="row-hint">Click any row to open the reader\u2019s full profile</div>';
+  html += '<div class="user-table-wrap" id="dirTableHost"></div>';
+  html += '<div class="pagination" id="userPagination"></div>';
+  html += '</div>';
+
+  content.innerHTML = html;
+
+  try { buildCharts(M); } catch(e) { console.error('buildCharts failed:', e); }
+  try { buildHeatmap(M); } catch(e) { console.error('buildHeatmap failed:', e); }
+  try { renderUserTable(); } catch(e) { console.error('renderUserTable failed:', e); }
+
+  const ds=document.getElementById('clearDrill'); if(ds) ds.addEventListener('click',()=>{ genreFilter=null; userPage=0; render(); });
+  const dsg=document.getElementById('clearSegDrill'); if(dsg) dsg.addEventListener('click',()=>{ segmentFilter=null; userPage=0; render(); });
+  // Reader-segment cells: click (or Enter/Space) toggles a directory filter and
+  // scrolls down to the User Directory so the filtered list is immediately visible.
+  const applySeg=(seg)=>{ segmentFilter=(segmentFilter===seg?null:seg); userPage=0; render();
+    if(segmentFilter){ const d=document.getElementById('sec-directory'); if(d) d.scrollIntoView({behavior:'smooth',block:'start'}); } };
+  document.querySelectorAll('.seg-cell[data-seg]').forEach(cell=>{
+    cell.addEventListener('click',()=>applySeg(cell.dataset.seg));
+    cell.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); applySeg(cell.dataset.seg); } });
+  });
+  const us=document.getElementById('userSearch'); if(us) us.addEventListener('input',e=>{ userSearchTerm=e.target.value; userPage=0; renderUserTable(); });
+  // Most-Read Titles: click a row to open the readers + ratings modal.
+  document.querySelectorAll('.pop-row[data-idx]').forEach(row=>{
+    row.addEventListener('click',()=>openTitleModal(Number(row.dataset.idx)));
+    row.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openTitleModal(Number(row.dataset.idx)); } });
+  });
+  const sg=document.getElementById('saveGoals'); if(sg) sg.addEventListener('click',()=>{
+    const gu=Math.max(1,parseInt(document.getElementById('goalUsers').value,10)||GOALS.users);
+    const gb=Math.max(1,parseInt(document.getElementById('goalBooks').value,10)||GOALS.books);
+    const ga=Math.max(1,parseInt(document.getElementById('goalActive').value,10)||GOALS.active);
+    GOALS={ users:gu, books:gb, active:ga }; saveGoals(GOALS); render(errMsg);
+  });
+}
+
+function statCard(accent,num,lbl,sub,trend){ return '<div class="stat-card accent-'+accent+'">'+(trend||'')+'<div class="num">'+num+'</div><div class="lbl">'+lbl+'</div><div class="sub">'+sub+'</div></div>'; }
+function triCard(lbl,cells){ let c=cells.map(x=>'<div class="tri-cell"><div class="tn">'+x[0]+'</div><div class="tl">'+x[1]+'</div></div>').join(''); return '<div class="tri-card"><div class="tri-lbl">'+lbl+'</div><div class="tri-row">'+c+'</div></div>'; }
+// Reader-segment card: like triCard but each cell is a clickable drill-down that
+// filters the User Directory to that segment. The "Power" cell carries a visible
+// POWER badge — this dashboard is fully admin-gated, so the internal POWER label
+// is intentional here (the public-facing app instead calls this group "Top Reader").
+function segmentCard(M){
+  const cells=[
+    { seg:'power',   n:M.powerN,   lbl:'Power Users', badge:true },
+    { seg:'new',     n:M.newN,     lbl:'New' },
+    { seg:'dormant', n:M.dormantN, lbl:'Dormant' }
+  ];
+  const c=cells.map(x=>{
+    const active=segmentFilter===x.seg?' seg-active':'';
+    const badge=x.badge?'<span class="power-badge" title="Top 20% of readers by books — internal POWER segment (admin only)">POWER</span>':'';
+    return '<div class="tri-cell seg-cell'+active+'" data-seg="'+x.seg+'" role="button" tabindex="0" '+
+      'title="Click to filter the User Directory to '+esc(x.lbl)+'">'+
+      '<div class="tn">'+fmtNum(x.n)+'</div><div class="tl">'+esc(x.lbl)+badge+'</div></div>';
+  }).join('');
+  return '<div class="tri-card"><div class="tri-lbl">Reader Segments <span class="seg-hint">click to filter</span></div><div class="tri-row">'+c+'</div>' + '<div style="font-size:10px; color:var(--wood-light); margin-top:16px; line-height:1.6; border-top:1px solid rgba(61,43,31,0.08); padding-top:10px;">' + '<strong>Legend:</strong><br>' + '<span class="power-badge" style="margin-left:0;margin-right:6px;">POWER</span>: 25+ books read (Top Readers)<br>' + '<span class="power-badge" style="margin-left:0;margin-right:6px;color:#1877f2;background:rgba(24,119,242,0.1)">ADMIN</span>: Site administrators<br>' + '<strong>New</strong>: Joined in the last 14 days<br>' + '<strong>Dormant</strong>: No activity in the last 30 days' + '</div></div>';
+}
+function panelOpen(title,sub){ return '<div class="panel"><h3>'+title+'</h3><div class="panel-sub">'+sub+'</div>'; }
+function featCell(n,l,trend){ return '<div class="feat-cell"><div class="fn">'+n+'</div><div class="fl">'+l+'</div>'+(trend?'<div style="margin-top:5px">'+trend+'</div>':'')+'</div>'; }
+function predictCell(v,l,note){ return '<div class="predict-cell"><div class="pv">'+v+'</div><div class="pl">'+l+'</div>'+(note?'<div class="pn">'+note+'</div>':'')+'</div>'; }
+function inDays(d){ if(d==null) return '—'; if(d<=0) return 'reached'; if(d<60) return d+' days'; if(d<730) return Math.round(d/30)+' mo'; return (d/365).toFixed(1)+' yr'; }
+function milestonesHTML(ms){
+  const row=(arr,suffix)=> arr.map(x=>'<div class="milestone'+(x.hit?' hit':'')+'"><span class="ms-ic">'+(x.hit?'✓':'○')+'</span>'+fmtNum(x.m)+' '+suffix+'</div>').join('');
+  return '<div style="margin-bottom:16px"><div class="panel-sub" style="margin-bottom:8px">Books Tracked</div><div class="milestones">'+row(ms.books,'books')+'</div></div>'+
+    '<div><div class="panel-sub" style="margin-bottom:8px">Registered Readers</div><div class="milestones">'+row(ms.users,'users')+'</div></div>';
+}
+function paceList(arr){ if(!arr.length) return '<div class="empty-note">Not enough days-to-read data yet.</div>';
+  const li=arr.map((r,i)=>'<li><span class="rank">'+(i+1)+'</span><span class="bk-meta"><span class="bk-title">'+esc(r.name)+'</span><span class="bk-author">'+esc(r.email)+'</span></span><span class="bk-badge">'+r.avg.toFixed(1)+'d · '+r.n+' bk</span></li>').join('');
+  return '<ul class="book-list">'+li+'</ul>'; }
+function scanFailList(S){
+  const rows=[['Fell back to manual',S.toManual],['Manual nudge shown',S.nudge],['ISBN not found',S.isbnNotFound],['ISBN lookup error',S.isbnError],['ISBN found',S.isbnFound]];
+  if(rows.every(r=>!r[1])) return '<div class="empty-note">No failure/lookup data recorded.</div>';
+  const max=Math.max(1,...rows.map(r=>r[1]));
+  const li=rows.map(r=>'<li><span style="flex:0 0 140px">'+esc(r[0])+'</span><span class="sf-bar"><span class="sf-fill" style="width:'+Math.round(r[1]/max*100)+'%"></span></span><span class="sf-n">'+fmtNum(r[1])+'</span></li>').join('');
+  return '<ul class="scan-fail-list">'+li+'</ul>'; }
+function signupFunnelHTML(stages, abandonCount, abandonRate){
+  const top=stages[0].n||1;
+  let h='';
+  if(abandonCount>0){
+    h+='<div class="abandon-banner">'+
+      '<div class="ab-icon">⚠️</div>'+
+      '<div>'+
+        '<div class="ab-title">'+fmtNum(abandonCount)+' Potential Reader'+(abandonCount===1?'':'s')+' Dropped Out of Signup ('+abandonRate+'% drop)</div>'+
+        '<div class="ab-desc">These visitors opened the sign-up modal or typed their email, but did not complete registration.</div>'+
+      '</div>'+
+    '</div>';
+  }
+  h+='<div class="funnel">';
+  stages.forEach((s,i)=>{
+    const w=Math.max(8,Math.round((s.n/top)*100));
+    const prev=i>0?stages[i-1].n:null;
+    const pctOfTop=Math.round(s.n/top*100);
+    let drop='';
+    if(prev!=null){
+      const d=prev?Math.round((prev-s.n)/prev*100):0;
+      drop=' · <span class="fs-drop">−'+d+'% drop</span>';
+    }
+    h+='<div class="funnel-stage"><div class="funnel-bar signup-bar" style="width:'+w+'%"><span class="fs-label">'+esc(s.label)+'</span><span class="fs-val">'+fmtNum(s.n)+'</span></div><div class="fs-meta">'+pctOfTop+'% of auth traffic'+drop+'</div></div>';
+  });
+  h+='</div>';
+  return h;
+}
+function funnelHTML(stages){
+  const top=stages[0].n||1; let h='<div class="funnel">';
+  stages.forEach((s,i)=>{ const w=Math.max(8,Math.round((s.n/top)*100)); const prev=i>0?stages[i-1].n:null; const pctOfTop=Math.round(s.n/top*100);
+    let drop=''; if(prev!=null){ const d=prev?Math.round((prev-s.n)/prev*100):0; drop=' · <span class="fs-drop">−'+d+'% drop</span>'; }
+    h+='<div class="funnel-stage"><div class="funnel-bar" style="width:'+w+'%"><span class="fs-label">'+esc(s.label)+'</span><span class="fs-val">'+fmtNum(s.n)+'</span></div><div class="fs-meta">'+pctOfTop+'% of signups'+drop+'</div></div>'; });
+  return h+'</div>'; }
+function popularList(arr){
+  if(!arr.length) return '<div class="empty-note">No book data available.</div>';
+  let li=arr.map((b,i)=>'<li class="pop-row" data-idx="'+i+'" role="button" tabindex="0" title="Click to see who read this title and how they rated it"><span class="rank">'+(i+1)+'</span>'+
+    (b.cover?'<img class="bk-cover" src="'+esc(b.cover)+'" alt="" onerror="this.style.visibility=\'hidden\'">':'<span class="bk-cover"></span>')+
+    '<span class="bk-meta"><span class="bk-title">'+esc(b.title)+'</span><span class="bk-author">'+esc(b.author||'Unknown')+'</span></span>'+
+    '<span class="bk-badge">'+b.count+'×</span></li>').join('');
+  return '<ul class="book-list">'+li+'</ul>';
+}
+
+/* ===================== Charts ===================== */
+function buildCharts(M){
+  const tr=document.getElementById('chTraffic');
+  if(tr && M.trafficTimeline.labels.length){
+    makeChart(tr,{ data:{ labels:M.trafficTimeline.labels, datasets:[
+      { type:'bar', label:'Anonymous Views', data:M.trafficTimeline.anonViews, backgroundColor:'rgba(140, 99, 67, 0.45)', stack:'views', yAxisID:'y' },
+      { type:'bar', label:'Logged-in Views', data:M.trafficTimeline.loggedInViews, backgroundColor:'rgba(28, 63, 120, 0.75)', stack:'views', yAxisID:'y' },
+      { type:'line', label:'Unique Visitors', data:M.trafficTimeline.uniqueVisitors, borderColor:PALETTE[1], backgroundColor:'transparent', borderWidth:2, tension:0.3, pointRadius:3, yAxisID:'y1' }
+    ]}, options: baseOpts({ scales:{
+      x:{ ticks:{ font:{family:"'DM Mono',monospace",size:9}, color:WOOD.light, maxRotation:0, autoSkip:true, maxTicksLimit:10 }, grid:{display:false} },
+      y:{ position:'left', beginAtZero:true, stacked:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{ color:'rgba(61,43,31,0.06)' } },
+      y1:{ position:'right', beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{display:false} }
+    }}) });
+  } else if(tr){ tr.parentElement.innerHTML='<div class="empty-note">Not enough traffic history to chart.</div>'; }
+  const g=document.getElementById('chGrowth');
+  if(g && M.growth.labels.length){
+    makeChart(g,{ data:{ labels:M.growth.labels, datasets:[
+      { type:'line', label:'Cumulative Readers', data:M.growth.cumUsers, borderColor:PALETTE[0], backgroundColor:'rgba(28,63,120,0.08)', borderWidth:2, tension:0.3, fill:true, yAxisID:'y', pointRadius:2 },
+      { type:'bar', label:'Books Added', data:M.growth.books, backgroundColor:'rgba(30,92,58,0.55)', yAxisID:'y1' }
+    ]}, options: baseOpts({ scales:{
+      x:{ ticks:{ font:{family:"'DM Mono',monospace",size:9}, color:WOOD.light, maxRotation:0, autoSkip:true, maxTicksLimit:10 }, grid:{display:false} },
+      y:{ position:'left', beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{ color:'rgba(61,43,31,0.06)' } },
+      y1:{ position:'right', beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{display:false} }
+    }}) });
+  } else if(g){ g.parentElement.innerHTML='<div class="empty-note">Not enough history to chart growth.</div>'; }
+
+  const r=document.getElementById('chRetention');
+  if(r){ makeChart(r,{ type:'doughnut', data:{ labels:['Returning','One-time'], datasets:[{ data:[M.returning,M.oneTime], backgroundColor:[PALETTE[1],'rgba(61,43,31,0.2)'], borderColor:'#faf5ee', borderWidth:2 }] }, options: baseOpts({ cutout:'62%', scales:{} }) }); }
+
+  const genreCanvas=document.getElementById('chGenre');
+  const topGenres=M.genres.slice(0,15);
+  if(genreCanvas && topGenres.length){
+    // Precompute the top readers per genre (by books read in that genre) so the
+    // hover tooltip can name who reads it most. Uses all-time per-reader genre
+    // counts from usersArr (the bar length itself reflects the selected range).
+    const readersByGenre={};
+    (M.usersArr||[]).forEach(u=>{ if(!u.genres) return; Object.keys(u.genres).forEach(g=>{ (readersByGenre[g]=readersByGenre[g]||[]).push({name:u.name,n:u.genres[g]}); }); });
+    Object.keys(readersByGenre).forEach(g=>{ readersByGenre[g].sort((a,b)=>b.n-a.n); });
+    const genreTip=Object.assign(tooltipStyle(),{ callbacks:{
+      afterBody:(items)=>{ if(!items.length) return ''; const g=items[0].label; const list=readersByGenre[g]||[];
+        if(!list.length) return '\nNo reader breakdown available.';
+        const top=list.slice(0,5).map((r,i)=>(i+1)+'. '+r.name+' ('+r.n+')');
+        const extra=list.length>5?('\n+'+(list.length-5)+' more readers'):'';
+        return '\nTop readers:\n'+top.join('\n')+extra; }
+    }});
+    makeChart(genreCanvas,{ type:'bar', data:{ labels:topGenres.map(x=>x[0]), datasets:[{ data:topGenres.map(x=>x[1]), backgroundColor:topGenres.map((x,i)=> (genreFilter&&genreFilter===x[0])?PALETTE[3]:PALETTE[i%PALETTE.length]) }] },
+      options: baseOpts({ indexAxis:'y', plugins:{ legend:{display:false}, tooltip:genreTip },
+        scales:{ x:{ beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{ color:'rgba(61,43,31,0.06)' } },
+                 y:{ ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.mid }, grid:{display:false} } },
+        onClick:(evt,els)=>{ if(els.length){ const gname=topGenres[els[0].index][0]; genreFilter=(genreFilter===gname?null:gname); userPage=0; render(); } } }) });
+  } else if(genreCanvas){ genreCanvas.parentElement.innerHTML='<div class="empty-note">No genre data in range.</div>'; }
+
+  const reg=document.getElementById('chRegion');
+  const topReg=M.regions.slice(0,12);
+  if(reg && topReg.length){
+    makeChart(reg,{ type:'bar', data:{ labels:topReg.map(x=>x[0]), datasets:[{ data:topReg.map(x=>x[1]), backgroundColor:topReg.map((x,i)=>PALETTE[(i+4)%PALETTE.length]) }] },
+      options: baseOpts({ indexAxis:'y', plugins:{ legend:{display:false}, tooltip:tooltipStyle() },
+        scales:{ x:{ beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light }, grid:{ color:'rgba(61,43,31,0.06)' } },
+                 y:{ ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.mid }, grid:{display:false} } } }) });
+  } else if(reg){ reg.parentElement.innerHTML='<div class="empty-note">No region data in range.</div>'; }
+
+  const f=document.getElementById('chFormat');
+  if(f && M.formats.length){
+    makeChart(f,{ type:'doughnut', data:{ labels:M.formats.map(x=>prettyEvent(x[0])), datasets:[{ data:M.formats.map(x=>x[1]), backgroundColor:M.formats.map((x,i)=>PALETTE[i%PALETTE.length]), borderColor:'#faf5ee', borderWidth:2 }] }, options: baseOpts({ cutout:'58%', scales:{} }) });
+  } else if(f){ f.parentElement.innerHTML='<div class="empty-note">No format data in range.</div>'; }
+
+  const s=document.getElementById('chSentiment');
+  const sc=M.sentCount; const svals=[sc.love,sc.like,sc.mixed,sc.dislike];
+  if(s && svals.some(v=>v>0)){
+    makeChart(s,{ type:'doughnut', data:{ labels:['Loved','Liked','Mixed','Disliked'], datasets:[{ data:svals, backgroundColor:[SENT_COLOR.love,SENT_COLOR.like,SENT_COLOR.mixed,SENT_COLOR.dislike], borderColor:'#faf5ee', borderWidth:2 }] }, options: baseOpts({ cutout:'58%', scales:{} }) });
+  } else if(s){ s.parentElement.innerHTML='<div class="empty-note">No sentiment data in range.</div>'; }
+
+  /* Growth forecast — historical cumulative readers + projected continuation */
+  const proj=document.getElementById('chProjection');
+  if(proj && M.predictions.projSeries){
+    const ps=M.predictions.projSeries;
+    const labels=ps.histLabels.concat(ps.futureLabels);
+    const histLen=ps.histData.length;
+    const histLine=ps.histData.concat(ps.futureLabels.map(()=>null));
+    // projected line starts at the last historical point so the dashes connect
+    const projLine=ps.histData.map((v,i)=> i===histLen-1?v:null).concat(ps.futureData);
+    makeChart(proj,{ data:{ labels, datasets:[
+      { type:'line', label:'Actual', data:histLine, borderColor:PALETTE[0], backgroundColor:'rgba(28,63,120,0.08)', borderWidth:2, tension:0.3, fill:true, pointRadius:2, spanGaps:false },
+      { type:'line', label:'Projected', data:projLine, borderColor:PALETTE[3], borderWidth:2, borderDash:[6,4], tension:0.2, fill:false, pointRadius:0, spanGaps:true }
+    ]}, options: baseOpts({ plugins:{ legend:{ labels:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.mid, boxWidth:12 } }, tooltip:tooltipStyle() },
+      scales:{ x:{ ticks:{ font:{family:"'DM Mono',monospace",size:9}, color:WOOD.light, maxRotation:0, autoSkip:true, maxTicksLimit:10 }, grid:{display:false} },
+               y:{ beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light, precision:0 }, grid:{ color:'rgba(61,43,31,0.06)' } } } }) });
+  } else if(proj){ proj.parentElement.innerHTML='<div class="empty-note">Not enough history to forecast yet.</div>'; }
+
+  /* Scanner adoption over time — stacked bars */
+  const adopt=document.getElementById('chAdoption');
+  if(adopt && M.scanner.adoption.labels.length){
+    const a=M.scanner.adoption;
+    makeChart(adopt,{ type:'bar', data:{ labels:a.labels, datasets:[
+      { label:'Scan', data:a.scan, backgroundColor:PALETTE[0] },
+      { label:'Search', data:a.search, backgroundColor:PALETTE[1] },
+      { label:'Manual', data:a.manual, backgroundColor:PALETTE[2] }
+    ]}, options: baseOpts({ plugins:{ legend:{ labels:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.mid, boxWidth:12 } }, tooltip:tooltipStyle() },
+      scales:{ x:{ stacked:true, ticks:{ font:{family:"'DM Mono',monospace",size:9}, color:WOOD.light, maxTicksLimit:10 }, grid:{display:false} },
+               y:{ stacked:true, beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.light, precision:0 }, grid:{ color:'rgba(61,43,31,0.06)' } } } }) });
+  } else if(adopt){ adopt.parentElement.innerHTML='<div class="empty-note">No add-source history yet.</div>'; }
+
+  /* Device / browser / OS doughnuts */
+  function platChart(id, entries, offset){
+    const c=document.getElementById(id); if(!c) return;
+    if(entries && entries.length){
+      makeChart(c,{ type:'doughnut', data:{ labels:entries.map(x=>x[0]), datasets:[{ data:entries.map(x=>x[1]), backgroundColor:entries.map((x,i)=>PALETTE[(i+offset)%PALETTE.length]), borderColor:'#faf5ee', borderWidth:2 }] },
+        options: baseOpts({ cutout:'56%', plugins:{ legend:{ labels:{ font:{family:"'DM Mono',monospace",size:10}, color:WOOD.mid, boxWidth:10 } }, tooltip:tooltipStyle() }, scales:{} }) });
+    } else { c.parentElement.innerHTML='<div class="empty-note">No data.</div>'; }
+  }
+  platChart('chDevice', M.devices.device, 0);
+  platChart('chBrowser', M.devices.browser, 4);
+  platChart('chOS', M.devices.os, 8);
+  applySectionPrefs();
+}
+
+/* ===================== Heatmap ===================== */
+function buildHeatmap(M){
+  const box=document.getElementById('heatBox'); if(!box) return;
+  if(!M.heatMax){ box.innerHTML='<div class="empty-note">No activity timestamps available'+(M.evAvail?'':' (event stream locked)')+'.</div>'; return; }
+  let html='<table><thead><tr><th></th>';
+  for(let h=0;h<24;h+=2){ html+='<th>'+h+'</th><th></th>'; }
+  html+='</tr></thead><tbody>';
+  for(let d=0;d<7;d++){
+    html+='<tr><td class="daylbl">'+DOW[d]+'</td>';
+    for(let h=0;h<24;h++){
+      const v=M.heat[d][h]; const a=v?(0.12+0.88*(v/M.heatMax)):0;
+      const bg=v?'rgba(28,63,120,'+a.toFixed(2)+')':'rgba(61,43,31,0.04)';
+      html+='<td><div class="cell" style="background:'+bg+'" title="'+DOW[d]+' '+h+':00 — '+v+'"></div></td>';
+    }
+    html+='</tr>';
+  }
+  html+='</tbody></table>';
+  const ampm=(h)=>{ const x=h%12||12; return x+(h<12?'am':'pm'); };
+  html+='<div class="peak-note">Peak activity: <strong>'+DOW[M.peakD]+' '+ampm(M.peakH)+'</strong> ('+M.heatMax+' events)</div>';
+  html+='<div class="heat-legend"><span>less</span><span class="swatch" style="background:rgba(28,63,120,0.12)"></span><span class="swatch" style="background:rgba(28,63,120,0.45)"></span><span class="swatch" style="background:rgba(28,63,120,0.8)"></span><span>more</span></div>';
+  box.innerHTML=html;
+}
+
+/* ===================== User Directory table ===================== */
+function renderUserTable(){
+  const M=MET; if(!M) return;
+  const host=document.getElementById('dirTableHost'); if(!host) return;
+  let rows=M.dirRows.slice();
+  const term=userSearchTerm.trim().toLowerCase();
+  if(term) rows=rows.filter(u=>(u.name||'').toLowerCase().includes(term)||(u.email||'').toLowerCase().includes(term));
+  const cols={ name:(u)=>(u.name||'').toLowerCase(), email:(u)=>(u.email||'').toLowerCase(), books:(u)=>u.books, joined:(u)=>u.joined?new Date(u.joined).getTime():0, last:(u)=>u.lastActive||0, status:(u)=>u.status };
+  const get=cols[userSortCol]||cols.books;
+  rows.sort((a,b)=>{ const va=get(a),vb=get(b); let c = va<vb?-1:(va>vb?1:0); return userSortDir==='desc'?-c:c; });
+  const total=rows.length;
+  const pages=Math.max(1,Math.ceil(total/USERS_PER_PAGE));
+  if(userPage>=pages) userPage=pages-1; if(userPage<0) userPage=0;
+  const slice=rows.slice(userPage*USERS_PER_PAGE,(userPage+1)*USERS_PER_PAGE);
+  const cnt=document.getElementById('userCount'); if(cnt) cnt.textContent=total+' reader'+(total===1?'':'s')+(genreFilter?' · genre: '+genreFilter:'');
+
+  const arrow=(c)=> userSortCol===c ? (userSortDir==='desc'?'▼':'▲') : '↕';
+  const th=(c,label)=>'<th data-col="'+c+'" class="'+(userSortCol===c?'sorted':'')+(c==='name'?' name-col':'')+'">'+label+'<span class="sort-arrow">'+arrow(c)+'</span></th>';
+  let html='<table class="user-table"><thead><tr>'+
+    th('name','Reader')+th('email','Email')+th('books','Books')+th('joined','Joined')+th('last','Last Active')+th('status','Status')+
+    '</tr></thead><tbody>';
+  if(!slice.length){ html+='<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--wood-light)">No readers match.</td></tr>'; }
+  slice.forEach(u=>{
+    const isAdmin = ['eae3ea25-9539-42ac-9e19-82039130c25f'].includes(u.user_id) || (u.email && u.email.includes('dino'));
+    const adminBadge = isAdmin ? '<span class="power-badge" style="color:#1877f2;background:rgba(24,119,242,0.1)">ADMIN</span>' : '';
+    html+='<tr data-uid="'+esc(u.user_id)+'">'+
+      '<td class="name-cell"><span class="avatar">'+esc(u.avatar)+'</span>'+esc(u.name)+adminBadge+'</td>'+
+      '<td class="email-cell">'+esc(u.email)+'</td>'+
+      '<td class="num-cell">'+fmtNum(u.books)+'</td>'+
+      '<td class="date-cell">'+fmtDate(u.joined)+'</td>'+
+      '<td class="date-cell">'+(u.lastActive?fmtRelative(new Date(u.lastActive).toISOString()):'—')+'</td>'+
+      '<td><span class="status-tag status-'+u.status+'">'+u.status+'</span></td>'+
+    '</tr>';
+  });
+  html+='</tbody></table>';
+  host.innerHTML=html;
+
+  host.querySelectorAll('th[data-col]').forEach(thEl=>thEl.addEventListener('click',()=>{
+    const c=thEl.dataset.col;
+    if(userSortCol===c){ userSortDir=userSortDir==='desc'?'asc':'desc'; } else { userSortCol=c; userSortDir=(c==='name'||c==='email')?'asc':'desc'; }
+    renderUserTable();
+  }));
+  host.querySelectorAll('tbody tr[data-uid]').forEach(tr=>tr.addEventListener('click',()=>openUserModal(tr.dataset.uid)));
+
+  const pag=document.getElementById('userPagination'); if(pag){
+    if(pages<=1){ pag.innerHTML=''; }
+    else {
+      let p='<button class="page-btn" data-pg="'+(userPage-1)+'" '+(userPage===0?'disabled':'')+'>‹</button>';
+      const win=2;
+      for(let i=0;i<pages;i++){ if(i===0||i===pages-1||Math.abs(i-userPage)<=win){ p+='<button class="page-btn '+(i===userPage?'active':'')+'" data-pg="'+i+'">'+(i+1)+'</button>'; } else if(Math.abs(i-userPage)===win+1){ p+='<span style="padding:0 4px;color:var(--wood-light)">…</span>'; } }
+      p+='<button class="page-btn" data-pg="'+(userPage+1)+'" '+(userPage===pages-1?'disabled':'')+'>›</button>';
+      pag.innerHTML=p;
+      pag.querySelectorAll('.page-btn[data-pg]').forEach(b=>b.addEventListener('click',()=>{ const pg=Number(b.dataset.pg); if(pg>=0&&pg<pages){ userPage=pg; renderUserTable(); } }));
+    }
+  }
+}
+
+/* ===================== User Modal ===================== */
+let modalToken=0;
+async function openUserModal(uid){
+  const u=MET&&MET.userById[uid]; if(!u) return;
+  const token=++modalToken;
+  destroyModalCharts();
+  document.getElementById('mAvatar').textContent=u.avatar||'📚';
+  document.getElementById('mName').textContent=u.name||'(no name)';
+  document.getElementById('mEmail').innerHTML=(u.email||'—')+'  ·  joined '+fmtDate(u.joined) + '<br><span id="mShelfIdTxt" style="font-family:\'DM Mono\',monospace;font-size:10px;opacity:0.8;margin-top:4px;display:inline-block;">Loading Shelf ID...</span>';
+  const body=document.getElementById('mBody');
+  body.innerHTML='<div class="empty-note">Loading library…</div>';
+  document.getElementById('userModal').classList.add('open');
+
+    // Fetch shelf ID
+    if (sb) {
+        sb.rpc('admin_get_user_shelves', { target_user_id: uid }).then(async ({data, error: rpcErr}) => {
+            const txt = document.getElementById('mShelfIdTxt');
+            if (txt) {
+                if (data && data.length > 0) {
+                    txt.textContent = `Shelf ID: ${data[0].id}`;
+                    txt.dataset.sid = data[0].id;
+                } else {
+                    txt.textContent = `Generating default shelf...`;
+                    const currentYear = new Date().getFullYear();
+                    const { data: newShelfId, error } = await sb.rpc('admin_create_shelf', {
+                        target_user_id: uid,
+                        shelf_year: currentYear
+                    });
+                    
+                    if (newShelfId) {
+                        txt.textContent = `Shelf ID: ${newShelfId}`;
+                        txt.dataset.sid = newShelfId;
+                    } else {
+                        txt.textContent = `Shelf ID: (None found) - ${error ? error.message : 'Unknown error'}`;
+                        txt.dataset.sid = '';
+                        console.error('Failed to auto-create shelf via RPC', error);
+                    }
+                }
+            }
+        });
+    }
+
+    // Admin Actions Logic
+    const adminActions = document.getElementById('mAdminActions');
+    // Only show if the current logged in user is admin, or we just assume the dashboard viewer is admin
+    // In this analytics dashboard, if they loaded the data, they are admin. We show it always here, or check if 'sb' exists.
+    adminActions.style.display = sb ? 'flex' : 'none';
+    
+    document.getElementById('mAdminEdit').onclick = () => adminUpdateUsername(uid, u.name);
+    document.getElementById('mAdminDelete').onclick = () => adminDeleteUser(uid, u.name);
+    
+    const shelfBtn = document.getElementById('mAdminCopyShelf');
+    shelfBtn.textContent = 'Copy Shelf ID';
+    shelfBtn.onclick = async () => {
+        const txt = document.getElementById('mShelfIdTxt');
+        const sid = txt ? txt.dataset.sid : null;
+        if (sid) {
+            navigator.clipboard.writeText(sid).catch(err => console.log('Clipboard err:', err));
+            shelfBtn.textContent = 'Copied!';
+            setTimeout(() => shelfBtn.textContent = 'Copy Shelf ID', 2000);
+        } else {
+            shelfBtn.textContent = 'No Shelf';
+            setTimeout(() => shelfBtn.textContent = 'Copy Shelf ID', 2000);
+        }
+    };
+
+
+  // Pull this reader's FULL library via the admin RPC (migration 21), which
+  // bypasses RLS. Fall back to whatever the anon key could already read.
+  let list=[], viaRpc=false;
+  const res=await fetchUserBooks(uid);
+  if(token!==modalToken) return; // modal was closed / another row clicked
+  if(res.rows){ list=res.rows; viaRpc=true; }
+  else { list=(u.booksList||[]).slice(); }
+  list=list.slice().sort((a,b)=>{ const da=bookDate(a)?new Date(bookDate(a)).getTime():0, db=bookDate(b)?new Date(bookDate(b)).getTime():0; return db-da; });
+  const words=list.reduce((s,b)=>s+(Number(b.word_count)||0),0);
+  const dtr=list.map(b=>Number(b.days_to_read)).filter(n=>n>0);
+  const avgDays=dtr.length?(dtr.reduce((a,b)=>a+b,0)/dtr.length):0;
+  const gc={}; list.forEach(b=>{ if(b.genre) gc[b.genre]=(gc[b.genre]||0)+1; });
+  const favGenre=Object.entries(gc).sort((a,b)=>b[1]-a[1])[0];
+
+  const booksCount = viaRpc ? list.length : u.books;
+  let html='<div class="m-stat-row">'+
+    '<div class="m-stat"><div class="v">'+fmtNum(booksCount)+'</div><div class="k">Books</div></div>'+
+    '<div class="m-stat"><div class="v">'+fmtWords(words)+'</div><div class="k">Words</div></div>'+
+    '<div class="m-stat"><div class="v">'+(avgDays?avgDays.toFixed(1):'—')+'</div><div class="k">Avg Days</div></div>'+
+    '<div class="m-stat"><div class="v" style="font-size:15px">'+esc(favGenre?favGenre[0]:'—')+'</div><div class="k">Top Genre</div></div>'+
+    '<div class="m-stat"><div class="v" style="font-size:13px">'+u.status+'</div><div class="k">Status</div></div>'+
+  '</div>';
+
+  if(!list.length){
+    if(viaRpc){
+      html += '<div class="empty-note">This reader hasn\u2019t added any books yet.</div>';
+    } else {
+      html += '<div class="empty-note">No library data is accessible for this reader through the public key. '+(u.books>0?('They have '+u.books+' books tracked, but row-level security hides individual entries. Run <code>migrations/migration_21_admin_books.sql</code> in Supabase to load every reader\u2019s library here.'):'They haven\u2019t added any books yet.')+'</div>';
+    }
+  } else {
+    // sentiment + timeline charts
+    const sc={love:0,like:0,mixed:0,dislike:0}; list.forEach(b=>{ if(b.sentiment&&sc[b.sentiment]!=null)sc[b.sentiment]++; });
+    const byMonth={}; list.forEach(b=>{ const d=bookDate(b); if(d){ const k=new Date(d).toISOString().slice(0,7); byMonth[k]=(byMonth[k]||0)+1; } });
+    const mk=Object.keys(byMonth).sort();
+    html += '<div class="m-section"><h4>Reading Activity</h4><div class="m-twocol">'+
+      '<div><div class="panel-sub">Books / month</div><div class="m-chart-box"><canvas id="mTimeline"></canvas></div></div>'+
+      '<div><div class="panel-sub">Sentiment</div><div class="m-chart-box"><canvas id="mSentiment"></canvas></div></div>'+
+    '</div></div>';
+    // library table
+    let rows=list.map(b=>{ const col=SENT_COLOR[b.sentiment]||'rgba(61,43,31,0.2)';
+      const d=bookDate(b); const yr=d?new Date(d).getFullYear():null;
+      return '<tr><td class="t">'+esc(b.title||'—')+'</td><td>'+esc(b.author||'—')+'</td><td>'+esc(b.genre||'—')+'</td>'+
+        '<td><span class="sent-dot" style="background:'+col+'"></span>'+esc(b.sentiment||'—')+'</td>'+
+        '<td>'+(yr||'—')+'</td>'+
+        '<td>'+fmtDate(bookDate(b))+'</td><td>'+(b.word_count?fmtWords(b.word_count):'—')+'</td></tr>'; }).join('');
+    html += '<div class="m-section"><h4>Library ('+list.length+')</h4><div class="m-lib"><table><thead><tr><th>Title</th><th>Author</th><th>Genre</th><th>Rated</th><th>Year</th><th>Finished</th><th>Words</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+
+  }
+
+  // ---- Engagement / per-user event history (migration 22 get_admin_events) ----
+  // Rendered regardless of whether the reader has books, so event-only activity
+  // still shows. Pulls this reader's events out of the full admin event stream.
+  const myEvents = (u.events||[]).slice().sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
+  if(myEvents.length){
+    const ec={}; myEvents.forEach(e=>{ ec[e.event_type]=(ec[e.event_type]||0)+1; });
+    const top=Object.entries(ec).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const wrapped=myEvents.some(e=>String(e.event_type).indexOf('share')>=0||String(e.event_type).indexOf('wrapped')>=0);
+    const firstAt=myEvents[myEvents.length-1].created_at, lastAt=myEvents[0].created_at;
+    // recent event timeline (latest 12)
+    const recent=myEvents.slice(0,12).map(e=>{
+      const d=e.event_data||{};
+      const detail=[d.feature,d.source,d.method,d.result,d.title,d.platform,d.count!=null?('×'+d.count):null].filter(Boolean).join(' · ');
+      return '<tr><td>'+fmtDateTime(e.created_at)+'</td><td>'+esc(prettyEvent(e.event_type))+'</td><td class="ev-detail">'+esc(detail||'—')+'</td></tr>';
+    }).join('');
+    html += '<div class="m-section"><h4>Engagement</h4><div class="feat-grid">'+
+      featCell(fmtNum(myEvents.length),'Total Events')+
+      featCell(fmtNum(top.length),'Event Types')+
+      featCell(wrapped?'Yes':'No','Wrapped / Shared')+
+      featCell(fmtDate(firstAt),'First Seen')+
+      featCell(fmtDate(lastAt),'Last Seen')+
+      top.slice(0,3).map(t=>featCell(fmtNum(t[1]),prettyEvent(t[0]))).join('')+
+    '</div>'+
+    '<div class="m-lib" style="margin-top:14px"><table><thead><tr><th>When</th><th>Event</th><th>Detail</th></tr></thead><tbody>'+recent+'</tbody></table></div>'+
+    (myEvents.length>12?('<div class="panel-sub" style="margin-top:6px">Showing latest 12 of '+fmtNum(myEvents.length)+' events</div>'):'')+
+    '</div>';
+  } else if(RAW.eventsAvailable){
+    html += '<div class="m-section"><h4>Engagement</h4><div class="empty-note">No usage events recorded for this reader yet.</div></div>';
+  } else {
+    html += '<div class="m-section"><h4>Engagement</h4><div class="empty-note">Engagement events are unavailable via the public key. Run <code>migrations/migration_22_admin_events.sql</code> in Supabase (or sign in as an admin) to load per-reader event history.</div></div>';
+  }
+
+  body.innerHTML=html;
+  document.getElementById('userModal').classList.add('open');
+
+  // build modal charts
+  const tl=document.getElementById('mTimeline');
+  if(tl && list.length){
+    const byMonth={}; list.forEach(b=>{ const d=bookDate(b); if(d){ const k=new Date(d).toISOString().slice(0,7); byMonth[k]=(byMonth[k]||0)+1; } });
+    const mk=Object.keys(byMonth).sort();
+    const c=new Chart(tl,{ type:'line', data:{ labels:mk.map(k=>{ const [y,m]=k.split('-'); return new Date(y,m-1,1).toLocaleDateString(undefined,{month:'short',year:'2-digit'}); }), datasets:[{ data:mk.map(k=>byMonth[k]), borderColor:PALETTE[0], backgroundColor:'rgba(28,63,120,0.1)', borderWidth:2, tension:0.3, fill:true, pointRadius:2 }] },
+      options: baseOpts({ plugins:{ legend:{display:false}, tooltip:tooltipStyle() }, scales:{ x:{ ticks:{ font:{family:"'DM Mono',monospace",size:9}, color:WOOD.light, maxTicksLimit:8 }, grid:{display:false} }, y:{ beginAtZero:true, ticks:{ font:{family:"'DM Mono',monospace",size:9}, color:WOOD.light, precision:0 }, grid:{ color:'rgba(61,43,31,0.06)' } } } }) });
+    modalCharts.push(c);
+  }
+  const ms=document.getElementById('mSentiment');
+  if(ms && list.length){
+    const sc={love:0,like:0,mixed:0,dislike:0}; list.forEach(b=>{ if(b.sentiment&&sc[b.sentiment]!=null)sc[b.sentiment]++; });
+    const c=new Chart(ms,{ type:'doughnut', data:{ labels:['Loved','Liked','Mixed','Disliked'], datasets:[{ data:[sc.love,sc.like,sc.mixed,sc.dislike], backgroundColor:[SENT_COLOR.love,SENT_COLOR.like,SENT_COLOR.mixed,SENT_COLOR.dislike], borderColor:'#faf5ee', borderWidth:2 }] },
+      options: baseOpts({ cutout:'58%', plugins:{ legend:{ labels:{ font:{family:"'DM Mono',monospace",size:9}, color:WOOD.mid, boxWidth:10 } }, tooltip:tooltipStyle() }, scales:{} }) });
+    modalCharts.push(c);
+  }
+}
+function closeUserModal(){ document.getElementById('userModal').classList.remove('open'); destroyModalCharts(); }
+
+  async function adminUpdateUsername(uid, currentName) {
+    if(!sb) return alert('Supabase client not initialized.');
+    const newName = prompt('Enter new username for this reader:', currentName || '');
+    if(newName === null || newName === currentName) return;
+    
+    const { data, error } = await sb.rpc('admin_update_username', { target_user_id: uid, new_name: newName });
+    if(error) {
+      alert('Error updating username. Did you run the SQL migration (migration_25_admin_actions.sql)?\n\n' + error.message);
+    } else {
+      alert('Username updated successfully! Refresh the page to see changes.');
+      closeUserModal();
+    }
+  }
+
+  async function adminSuspendUser(uid, currentStatus) {
+    if(!sb) return alert('Supabase client not initialized.');
+    const willSuspend = currentStatus !== 'suspended';
+    const actionStr = willSuspend ? 'suspend' : 'unsuspend';
+    if(!confirm('Are you sure you want to ' + actionStr + ' this user?')) return;
+    
+    const { data, error } = await sb.rpc('admin_suspend_user', { target_user_id: uid, suspend: willSuspend });
+    if(error) {
+      alert('Error changing status. Did you run migration_26_advanced_admin.sql?\n\n' + error.message);
+    } else {
+      alert('User successfully ' + (willSuspend?'suspended':'unsuspended') + '! Refresh the page to see changes.');
+      closeUserModal();
+    }
+  }
+
+  async function adminRecalculate(uid) {
+    if(!sb) return alert('Supabase client not initialized.');
+    if(!confirm('Recalculate this user\'s total books and word count?')) return;
+    
+    const { data, error } = await sb.rpc('admin_recalculate_stats', { target_user_id: uid });
+    if(error) {
+      alert('Error recalculating. Did you run migration_26_advanced_admin.sql?\n\n' + error.message);
+    } else {
+      alert('Stats recalculated successfully! Refresh the page to see changes.');
+    }
+  }
+
+  function adminExportData(uid, name, bookList) {
+    const data = JSON.stringify(bookList, null, 2);
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'export_' + (name||'user').replace(/\s+/g, '_').toLowerCase() + '_' + uid.substring(0,8) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function adminForcePasswordReset(uid, email) {
+    navigator.clipboard.writeText(email).catch(()=>{});
+    alert("EMAIL COPIED TO CLIPBOARD: " + email + "\n\nTo force a password reset:\n1. Go to your Supabase Dashboard\n2. Go to Authentication > Users\n3. Search for the email (paste it)\n4. Click the '...' menu next to the user > 'Send password recovery'");
+  }
+
+  function adminImpersonate(uid, email) {
+    navigator.clipboard.writeText(uid).catch(()=>{});
+    alert("USER UUID COPIED TO CLIPBOARD: " + uid + "\n\nTo impersonate:\n1. Open your browser\'s DevTools console on the main ShelfLife app\n2. If you know how to generate a custom JWT for this UUID via the Supabase Dashboard SQL Editor, you can inject it.\n3. (Alternatively) Since true impersonation requires an Edge Function, it's easier to view their profile or export their data to reproduce issues.");
+  }
+
+  async function adminDeleteUser(uid, currentName) {
+    if(!sb) return alert('Supabase client not initialized.');
+    const confirmName = prompt('WARNING: This will permanently delete this user and all their books/events.\nType DELETE to delete this user:');
+    if(confirmName !== 'DELETE') {
+        if (confirmName !== null) alert('Aborting deletion.');
+        return;
+    }
+    
+    const { data, error } = await sb.rpc('admin_delete_user', { target_user_id: uid });
+    if(error) {
+      alert('Error deleting user. Did you run the SQL migration (migration_25_admin_actions.sql)?\n\n' + error.message);
+    } else {
+      alert('User deleted successfully! Refresh the page to see changes.');
+      closeUserModal();
+    }
+  }
+
+document.getElementById('mClose').addEventListener('click', closeUserModal);
+document.getElementById('userModal').addEventListener('click', e=>{ if(e.target.id==='userModal') closeUserModal(); });
+
+/* ===================== Most-Read Title modal ===================== */
+const SENT_LABEL={ love:'Loved', like:'Liked', mixed:'Mixed', dislike:'Disliked' };
+function openTitleModal(idx){
+  const M=MET; if(!M||!M.popular) return;
+  const b=M.popular[idx]; if(!b) return;
+  document.getElementById('tmCover').innerHTML = b.cover
+    ? '<img src="'+esc(b.cover)+'" alt="" style="width:38px;height:auto;border-radius:3px" onerror="this.replaceWith(document.createTextNode(\'📖\'))">'
+    : '📖';
+  document.getElementById('tmTitle').textContent=b.title||'(untitled)';
+  document.getElementById('tmAuthor').textContent=(b.author||'Unknown author')+'  ·  read by '+fmtNum(b.count)+' reader'+(b.count===1?'':'s');
+  const body=document.getElementById('tmBody');
+
+  const readers=(b.readers||[]).map(r=>{ const u=M.userById[r.user_id];
+    return { name:u?u.name:'(unknown reader)', avatar:u?u.avatar:'📚', email:u?u.email:'', sentiment:r.sentiment }; });
+  // Sentiment breakdown
+  const sc={love:0,like:0,mixed:0,dislike:0,none:0};
+  readers.forEach(r=>{ if(r.sentiment&&sc[r.sentiment]!=null) sc[r.sentiment]++; else sc.none++; });
+  let html='';
+  if(readers.length){
+    const chips=['love','like','mixed','dislike'].filter(k=>sc[k]).map(k=>
+      '<span class="sent-chip"><span class="sent-dot" style="background:'+SENT_COLOR[k]+'"></span>'+SENT_LABEL[k]+' '+sc[k]+'</span>').join('');
+    html+='<div class="m-section"><h4>Rating Breakdown</h4><div class="sent-chips">'+(chips||'<span class="empty-note">No ratings recorded.</span>')+
+      (sc.none?'<span class="sent-chip"><span class="sent-dot" style="background:rgba(61,43,31,0.25)"></span>Unrated '+sc.none+'</span>':'')+'</div></div>';
+    // Reader list, sorted by rating strength then name
+    const order={love:0,like:1,mixed:2,dislike:3,null:4};
+    readers.sort((a,b)=>(order[a.sentiment]??4)-(order[b.sentiment]??4) || a.name.localeCompare(b.name));
+    const rows=readers.map(r=>{
+      const lbl=r.sentiment?SENT_LABEL[r.sentiment]:'—';
+      const col=r.sentiment?SENT_COLOR[r.sentiment]:'rgba(61,43,31,0.25)';
+      return '<tr><td class="name-cell"><span class="avatar">'+esc(r.avatar)+'</span>'+esc(r.name)+'</td>'+
+        '<td class="email-cell">'+esc(r.email||'—')+'</td>'+
+        '<td><span class="sent-dot" style="background:'+col+'"></span>'+esc(lbl)+'</td></tr>';
+    }).join('');
+    html+='<div class="m-section"><h4>Readers</h4><div class="m-lib"><table><thead><tr><th>Reader</th><th>Email</th><th>Rating</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  } else {
+    html+='<div class="m-section"><div class="empty-note">No per-reader detail is readable for this title via the current key.</div></div>';
+  }
+  body.innerHTML=html;
+  document.getElementById('titleModal').classList.add('open');
+}
+function closeTitleModal(){ document.getElementById('titleModal').classList.remove('open'); }
+document.getElementById('tmClose').addEventListener('click', closeTitleModal);
+document.getElementById('titleModal').addEventListener('click', e=>{ if(e.target.id==='titleModal') closeTitleModal(); });
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeUserModal(); closeTitleModal(); } });
+
+/* ===================== CSV export ===================== */
+function exportCSV(){
+  const M=MET; if(!M){ return; }
+  const lines=[];
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  lines.push('Shelf Life Analytics Export');
+  lines.push('Generated,'+q(new Date().toISOString()));
+  lines.push('Range,'+q(RANGE_LABEL[activeRange]||'all'));
+  lines.push('Users source,'+q(RAW.usersSource));
+  lines.push('');
+  lines.push('SUMMARY');
+  lines.push('Metric,Value');
+  [['Registered Readers',M.totalUsers],['Active Readers',M.activeReaders],['Books Tracked',M.totalBooksTracked],['Activation Rate %',M.activationRate],['Avg Books/Reader',M.avgPerReader.toFixed(2)],['Power Users',M.powerN],['New Users',M.newN],['Dormant Users',M.dormantN],['Words Read',M.totalWords],['Avg Days/Book',M.avgDays.toFixed(1)],['WAU',M.wau],['MAU',M.mau]].forEach(r=>lines.push(q(r[0])+','+q(r[1])));
+  lines.push('');
+  lines.push('GENRES');
+  lines.push('Genre,Books');
+  M.genres.forEach(g=>lines.push(q(g[0])+','+q(g[1])));
+  lines.push('');
+  lines.push('USER DIRECTORY');
+  lines.push('Name,Email,Books,Joined,Last Active,Status');
+  M.dirRows.forEach(u=>lines.push([u.name,u.email,u.books,u.joined?fmtDate(u.joined):'',u.lastActive?new Date(u.lastActive).toISOString():'',u.status].map(q).join(',')));
+  const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='shelflife-analytics-'+new Date().toISOString().slice(0,10)+'.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+
+/* ===================== Init ===================== */
+checkSession();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

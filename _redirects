@@ -1,0 +1,33 @@
+# ── Note to Shelf — Netlify Redirects ───────────────────────────
+# Legacy URL redirects (old bookapp, ShelfLife, and ShelfCare paths → NoteToShelf)
+/bookapp.html         /NoteToShelf/index.html   301
+/bookapp/bookapp     /NoteToShelf/index.html   301
+/bookapp/bookapp.html /NoteToShelf/index.html  301
+/bookapp/*           /NoteToShelf/:splat       301
+
+/shelflife           /NoteToShelf/index.html   301
+/shelflife/*         /NoteToShelf/:splat       301
+/ShelfLife           /NoteToShelf/index.html   301
+/ShelfLife/*         /NoteToShelf/:splat       301
+
+/shelfcare           /NoteToShelf/index.html   301
+/shelfcare/*         /NoteToShelf/:splat       301
+/ShelfCare           /NoteToShelf/index.html   301
+/ShelfCare/*         /NoteToShelf/:splat       301
+
+/notetoshelf         /NoteToShelf/index.html   301
+/notetoshelf/*       /NoteToShelf/:splat       301
+
+# Direct Multi-Page Admin routes (exempt from SPA fallback)
+/NoteToShelf/analytics.html   /analytics.html       200
+/NoteToShelf/analytics        /analytics.html       200
+/NoteToShelf/laseroutput.html /laseroutput.html     200
+/NoteToShelf/laseroutput      /laseroutput.html     200
+
+/analytics.html               /analytics.html       200
+/analytics                    /analytics.html       200
+/laseroutput.html             /laseroutput.html     200
+/laseroutput                  /laseroutput.html     200
+
+# SPA / hash-routing fallback: serve index.html for NoteToShelf
+/NoteToShelf/*       /NoteToShelf/index.html   200

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — ShelfLife</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf5ee;
+      --card-bg: #ffffff;
+      --text: #2b1b11;
+      --text-muted: #5c4a3e;
+      --accent: #8B2635;
+      --border: rgba(61, 43, 31, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 48px;
+      box-shadow: 0 4px 20px rgba(61, 43, 31, 0.06);
+    }
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 28px 0 12px;
+    }
+    p {
+      margin-bottom: 16px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    ul {
+      margin: 0 0 16px 24px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: rgba(139, 38, 53, 0.05);
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 4px;
+      margin: 24px 0;
+    }
+    .highlight-box p {
+      margin: 0;
+      color: var(--text);
+      font-weight: 500;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Privacy Policy</h1>
+      <div class="subtitle">ShelfLife &middot; Effective Date: September 16, 2026</div>
+    </div>
+
+    <p>Welcome to <strong>ShelfLife</strong> ("the Application", "we", "our"), a personal reading tracker and virtual bookshelf web application accessible at <a href="https://dinomike.ca/NoteToShelf/">https://dinomike.ca/NoteToShelf/</a>. We are committed to protecting your privacy and being fully transparent about how your information is handled.</p>
+
+    <div class="highlight-box">
+      <p>Summary: ShelfLife only accesses your basic Google profile (email and name) to create your reading account. We never sell your data, we never share it with advertisers, and you can delete your account at any time.</p>
+    </div>
+
+    <h2>1. Information We Collect</h2>
+    <p>When you choose to sign in using Google OAuth authentication, we collect only the minimal information required to authenticate your identity and maintain your reading account:</p>
+    <ul>
+      <li><strong>Google Account Email Address:</strong> Used as your unique account identifier and to associate your reading records with your account.</li>
+      <li><strong>Google Account Name & Profile Avatar:</strong> Used to display your name and profile picture on your personal reading shelf.</li>
+      <li><strong>User-Generated Reading Data:</strong> Book titles, authors, word counts, reading dates, reviews, ratings, and to-read queues that you voluntarily add or import into your shelf.</li>
+    </ul>
+
+    <h2>2. How We Use Your Information</h2>
+    <p>We use your information solely for the following purposes:</p>
+    <ul>
+      <li>To provide, operate, and maintain the ShelfLife application.</li>
+      <li>To authenticate your identity across browser sessions.</li>
+      <li>To store and synchronize your personal reading logs, bookshelf items, reading statistics, and bookmarks across your devices.</li>
+    </ul>
+
+    <h2>3. Data Sharing and Disclosure</h2>
+    <p>We do <strong>not</strong> sell, rent, lease, or trade your personal information to any third parties. We do not use your information for targeted advertising or marketing purposes.</p>
+    <p>Your data is transmitted and stored securely using our backend cloud service provider, <strong>Supabase</strong>, which enforces industry-standard encryption in transit (HTTPS/TLS) and at rest, along with Row Level Security (RLS) policies ensuring only you can access and modify your reading data.</p>
+
+    <h2>4. Google API Limited Use Disclosure</h2>
+    <p>ShelfLife's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+
+    <h2>5. Data Retention and Account Deletion</h2>
+    <p>We retain your reading data only for as long as your account remains active. You have full control over your data:</p>
+    <ul>
+      <li>You can remove individual books, reviews, or queues directly within the application at any time.</li>
+      <li>To permanently delete your entire account and all associated reading data from our servers, you may contact us at <a href="mailto:mike.warren.maker@gmail.com">mike.warren.maker@gmail.com</a> with the subject "Delete My ShelfLife Account". Requests are honored promptly.</li>
+    </ul>
+
+    <h2>6. Security</h2>
+    <p>We implement appropriate technical and organizational measures to safeguard your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+
+    <h2>7. Contact Us</h2>
+    <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact:</p>
+    <p>
+      <strong>Mike Warren</strong><br>
+      Developer of ShelfLife<br>
+      Website: <a href="https://dinomike.ca/">https://dinomike.ca/</a><br>
+      Email: <a href="mailto:mike.warren.maker@gmail.com">mike.warren.maker@gmail.com</a>
+    </p>
+
+    <div class="footer">
+      <span>&copy; 2026 ShelfLife &middot; Mike Warren</span>
+      <a href="https://dinomike.ca/NoteToShelf/">Return to ShelfLife</a>
+    </div>
+  </div>
+</body>
+</html>
