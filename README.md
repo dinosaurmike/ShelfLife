@@ -1,109 +1,150 @@
-# ShelfLife
+# Orbit
 
-![ShelfLife: a reading tracker that feels like your own wooden bookshelf](docs/images/shelflife-header.png)
+![Orbit: an open-source AI desk companion](docs/images/orbit-header.gif)
 
-**A reading tracker that feels like your own wooden bookshelf.**
+**An open-source AI desk companion. An old Android phone becomes its face.**
 
-ShelfLife is an installable web app for readers. Every book you finish takes its place as a spine
-on a warm, editorial-style shelf, coloured by how you felt about it. Over time your shelf becomes a
-record of your reading life: what you loved, how fast you read, the quotes you kept, and a
-"Year in Review" worth sharing. Sign in with Google, and your library follows you to any device.
+Orbit is a pair of glowing holographic eyes living on a phone on your desk. It watches you when
+you're there, gets up to its own little things when you're not, and when you talk to it, it
+talks back (Google's Gemini Live, with your own free key). It remembers you, has a hobby it
+studies a bit each day, and grows into a friendship over weeks. Add a $70 pan/tilt neck and it
+physically turns to look at you.
 
-Created by **Mike Warren** ([@dinosaurmike](https://github.com/dinosaurmike)).
-
----
+No subscription. No company servers. If this project vanished tomorrow, your Orbit would keep
+working.
 
 ## What it does
 
-**Your shelf**
-- Books stand as tactile spines on a wooden shelf: real cover art, 3D lighting, and a coloured
-  headband for how you felt (loved, liked, mixed, disliked). Switch to classic sentiment colours
-  any time.
-- Monthly and quarterly bookmark ribbons, a lifetime view across every year, and five themes
-  (Classic, Wood, Dark Wood, Library, Minimal).
-- **Cozy Mode**: a calmer, simplified main screen for readers who just want their shelf.
+**Feels alive**
+- Holographic eyes (drifting cyan/magenta fringes, glow, rainbow sheen, CRT scan lines), or a
+  plain classic style. All adjustable, with a live preview, and shareable as a text code.
+- Follows your face (on the phone; camera images never leave it), with tiny eye flicks like real eyes.
+- Moods you can read: listening, thinking, talking, dozing, asleep (breathing, floating z's).
+- Little habits: slow blinks, stretches, sneezes, hiccups, a double-take when you come back,
+  jumping at a loud noise, glancing at movement, chasing a firefly, daydreaming about its hobby.
+- Its own sounds, synthesized in code: a whoosh at start-up, chirps, chimes, a sleepy sigh.
+- Smiles back when you smile; purrs when you stroke its eyes; waves back when you wave
+  (and reacts to 👍 👎 ✌ 🤟, or goes quiet at a "shh" finger); bobs along to music.
+- Birthday confetti, Christmas snow, a Halloween glow.
+- The screen's edge glows a color when it matters: green for a timer, amber for a reminder,
+  violet while you focus, red when it isn't listening. A clear "offline" sign when the internet's down.
 
-**Logging a book**
-- Scan the ISBN barcode or the cover (on-device OCR), search, enter it by hand, or import a CSV.
-- Rich records: dates, format, genre, word count (the measure of length, with page counts
-  converted), mood and theme tags, a one-line review, favourite quotes, re-reads, a private lock.
-- Currently reading and to-read shelves alongside finished books.
+**Talks with you**
+- Tap, or say **"Orbit"** / **"Orby"** (offline wake word). Interrupt it any time.
+- Gemini picks expressions as it talks: happy arches, surprise, a nod, a wink…
+- "What am I holding?" (camera), "what's on my desk?" (looks down), and "what do you think of
+  this?" (it **turns its head to your computer screen** and looks; nothing to install on the
+  computer, or use the optional [Orbit Desk](desk/README.md) for crisp text). Only when you ask.
+- Reminders and timers, shown as a ring draining around one eye; focus sessions ("help me focus
+  for 25 minutes"); your calendar's day, with a heads-up ring before each event.
+- Knows who's who: learns the faces of your household (on the phone) and greets each by name.
+- "What did we do this week?": a little recap of your moments together.
+- Weather when you ask ("will it rain later?", "what about Saturday?"): it says it once, with the
+  high and low and roughly when, while its eyes zoom in to show an animated weather icon in one eye
+  and the temperature in the other. It asks your town once and remembers it; °C or °F.
+- Messages for your household: "tell Sarah dinner's ready", and it passes it on when it sees her
+  (or she asks), then tells you she got it.
+- Knows the time and can search the web.
 
-**Seeing your reading**
-- Quick stats, streaks, monthly pace, words read, fastest reads and longest books.
-- **Reading DNA**: a radar of what you actually read, and **For You** recommendations scored
-  against your taste and trajectory, never repeating a book you've read.
-- **Year in Review**: an animated, shareable story of your reading year, plus monthly recaps.
-- **The Reading Tree**: your reading history grown into a tree, with buried treasures to find.
-- A trophy room of achievements, with a "Book of the Year" crown.
+**Plays your music**
+- "Play some jazz", "something to focus to", "play rain": internet radio and its own soundscapes
+  (rain, ocean, fire, brown noise, ambient…) work with no account at all.
+- Specific songs and your playlists from your own music service (Spotify, YouTube Music, Amazon
+  Music, Apple Music, Deezer, Tidal, Pandora, SoundCloud): sign in to its app on the phone and
+  link it in three taps. "Skip", "who's this?", "stop the music in 30 minutes".
+- Its eyes take on the album's colours, bob and sway to the beat, and half-close for slow songs.
+- The music dips while you talk to it. Swipe across the eyes to skip, thumbs up to like.
+- Need quiet fast? Tap it, hold up a hand, or cover its eyes: everything stops.
 
-**Reading with others**
-- Share your shelf with a link or QR code: anyone can browse it, read-only, without signing in.
-  Lock any book to keep it off your shared shelf.
-- Follow readers, a social feed, and a Discover grid of readers with similar taste, each with a
-  profile page (with a privacy setting for whether others can discover you).
-- Leave a friend a note tied to a book and a milestone; it pops up when they reach it.
-  Recommend a book straight to a friend's inbox.
-- **Book clubs**: pick the club's next read with a single search box, with suggestions from the
-  group's taste, and chat about it.
+**Grows with you**
+- Remembers you (notes on the phone you can see, edit or wipe), and keeps a one-line diary of
+  your conversations, so it can pick up where you left off ("how did the build go?").
+- Has a hobby, does a little homework each day, keeps a journal, and tells you about it.
+- Remembers when you met; celebrates a week, a month, 100 days.
+- Gentle nudges: a stretch after two hours at the desk, bed when it's late.
 
-**Made to keep**
-- Installable as an app on phones and computers (PWA), works offline.
-- Export your library as CSV or JSON at any time; your data is yours.
-- **Laser Output**: turn your shelf into a single-line SVG ready for a laser engraver or plotter.
+**Feels like a device, not an app**
+- Appliance mode: starts when the phone turns on, stays pinned on screen, comes back by itself
+  after a problem.
+- Its own sound signature, a spinning comet in the corner while it thinks, eyes that lift with
+  each syllable as it talks, and plain-spoken errors that retry by themselves.
 
-## Try it
+**With a neck, it watches you like a dog would**
+- Keeps your face centred when you're near, keeps a looser eye on you across the room, and glances
+  away now and then. Loses you? It looks the way you went, turns toward movement, and scans the room.
+- "Look to your left", "face me", "look over there and tell me what you see".
+- Gentle, natural moves: a soft start, unhurried drifting, a bow when it falls asleep.
+- Neck firmware updates over Bluetooth from the app, in one tap.
 
-ShelfLife runs at **<https://dinomike.ca/shelflife>**. Open it on your phone or computer, sign in
-with Google (or view the demo shelf), and use your browser's **Install** / **Add to Home Screen**
-to keep it as an app.
+**Looks after itself (and you)**
+- Dozes when nobody's around (burn-in protection), rests when the phone is warm.
+- A live status page with check marks: internet, key, camera, neck, battery, temperature.
+- **Sleep:** double-tap or say "goodnight"; it wakes by itself when it sees you come back.
+  **Privacy mode:** say "privacy mode" and the camera and microphone switch fully off.
 
-## How it's built
+## What you need
 
-- **Front end:** HTML, CSS and vanilla JavaScript modules, bundled with [Vite](https://vite.dev).
-  Hand-made SVG and canvas visualisations; no UI framework.
-- **Back end:** [Supabase](https://supabase.com) (Postgres, Google sign-in, and Row-Level Security
-  on every table, so each reader can only reach their own data and what others share).
-- **Scanning:** QuaggaJS and ZXing (barcodes) and Tesseract.js (cover text), loaded only when needed.
-- **Hosting:** any static host; [Netlify](https://netlify.com) configuration included, with one
-  small serverless function for AI-assisted review polishing (Gemini, key kept in Netlify).
-- **PWA:** web app manifest and a network-first service worker.
+- An Android phone or tablet, **Android 9 or newer**. An old one is perfect.
+- A **free Gemini API key**: <https://aistudio.google.com/apikey>
+- Optional: a [pan/tilt neck](neck/NECK_SETUP.md) (about $80 in parts), so it can turn to look
+  at you and your screen.
 
-### Project layout
+## Install
 
-```
-index.html              the app's page (styles and markup)
-src/                    the app's code: core (app, auth, database), features, components, utils
-analytics.html          admin usage dashboard
-reading_tree.html       The Reading Tree
-laseroutput.html        Laser Output (single-line SVG of your shelf)
-privacy.html            privacy policy
-libs/                   barcode and OCR libraries (loaded on demand)
-icons/, manifest.json, sw.js, _redirects    app icons, PWA manifest, service worker, Netlify routing
-migrations/             database migrations (SQL, run in order in Supabase)
-netlify/functions/      the review-polishing function
-scripts/                build helper and one-off data scripts (use environment variables for keys)
-docs/                   setup guide and images
-```
+1. Download the latest `.apk` from this repository's **Releases** page and open it on the phone
+   (allow installing from your browser or files app when asked).
+2. Open **Orbit** and allow the camera and microphone. It wakes up for the first time.
+3. A short welcome setup walks you through a free Gemini key, its name and voice, and
+   appliance mode (every step can be skipped).
+4. Tap the eyes, or say "Hey Orby", and talk.
 
-### Running it yourself
+Tip: run it plugged in, sideways (landscape), at about eye height.
 
-See **[docs/SETUP.md](docs/SETUP.md)** for the full walkthrough. In short:
+| On the eyes | Does |
+|---|---|
+| **•** Tap | Start or end a conversation |
+| **••** Double-tap | Sleep / wake (camera and microphone fully off while asleep) |
+| **—** Long-press | Settings |
 
-```bash
-npm install
-npm run dev      # local development at http://localhost:8000
-npm run build    # a complete site in dist/, ready to upload to a static host
-```
+## Make your own
+
+Orbit is meant to be built on, remixed, and given a body of your own:
+
+- **[Build your own Orbit](docs/BUILD_YOUR_OWN.md)**: from phone-only (free) to neck and enclosure.
+- **[Neck protocol](docs/NECK_PROTOCOL.md)**: any Bluetooth LE gadget that understands a few
+  text commands can be Orbit's body.
+- **[Contributing](CONTRIBUTING.md)**: add an expression, an idle habit, a sound, a personality.
+- **Share your look:** Settings → Eyes → **Copy my look** gives a line of text anyone can paste.
+- Show off your build in **Discussions → Show your Orbit**.
 
 ## Privacy
 
-ShelfLife only uses your basic Google profile (name, email and picture) to sign you in. Your books
-are stored in the app's database, protected by per-reader access rules. Your shelf is shareable by
-link or QR code (read-only); books you lock stay private. Full details: [privacy.html](privacy.html).
+Face tracking, the wake word and memory stay on the phone. Your voice goes to Gemini only during
+a conversation. Photos and screen pictures are taken only when you ask (or, if you switch it on,
+one hello photo a day). Full details: [docs/PRIVACY.md](docs/PRIVACY.md).
+
+## Building from source
+
+1. Install **Android Studio** and open this project.
+2. Optional, for testing: put `GEMINI_API_KEY=your_key` in `local.properties`. It's only built
+   into *debug* builds, never release builds. **Never commit `local.properties`.**
+3. Click **Run**.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a tour of the code.
+
+## Built with
+
+[Gemini Live API](https://ai.google.dev/gemini-api/docs/live) ·
+[ML Kit face detection](https://developers.google.com/ml-kit/vision/face-detection) ·
+[CameraX](https://developer.android.com/media/camera/camerax) ·
+[Vosk](https://alphacephei.com/vosk/) (Apache 2.0) · [OkHttp](https://square.github.io/okhttp/) ·
+Jetpack Compose · [Open-Meteo](https://open-meteo.com/) · ESP32 / Arduino
+
+## Who made it
+
+Orbit was created by **Mike Warren** ([@dinosaurmike](https://github.com/dinosaurmike)) and is
+open source, so it's also made by everyone who contributes. Thank you!
 
 ## License
 
-© 2026 Mike Warren. All rights reserved. The code is shared here so you can see how it's made; it
-isn't licensed for reuse. See [LICENSE](LICENSE). The bundled third-party libraries keep their own
-licences.
+MIT. See [LICENSE](LICENSE). Build it, change it, sell your neck kits; just keep the license notice.
