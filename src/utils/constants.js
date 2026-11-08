@@ -281,7 +281,7 @@ export const ACHIEVEMENTS = {
     soc_geneticist: { name: 'Geneticist', cat: 'social', icon: '\u{1F9EC}', flavor: 'Shape your target DNA profile.', clue: 'You decided who you want to become.', hidden: false, secret: false },
     soc_recruiter: { name: 'The Recruiter', cat: 'social', icon: '\u{1F4EF}', flavor: 'Invite someone to your book club.', clue: 'You called others to the round table.', hidden: false, secret: false },
     soc_founder: { name: 'The Founder', cat: 'social', icon: '\u{1F3DB}\u{FE0F}', flavor: 'Create a book club.', clue: 'You laid the first stone of a new society.', hidden: false, secret: false },
-    soc_evangelist: { name: 'The Evangelist', cat: 'social', icon: '\u{1F54A}\u{FE0F}', flavor: 'Invite a friend to join ShelfLife.', clue: 'You opened the doors for a newcomer.', hidden: false, secret: false },
+    soc_evangelist: { name: 'The Evangelist', cat: 'social', icon: '\u{1F54A}\u{FE0F}', flavor: 'Invite a friend to join Note to Shelf.', clue: 'You opened the doors for a newcomer.', hidden: false, secret: false },
     soc_tastemaker: { name: 'The Tastemaker', cat: 'social', icon: '\u{1F377}', flavor: 'Someone read a book you recommended to them via a note.', clue: 'They listened to your wisdom.', hidden: false, secret: false },
     soc_doppelganger: { name: 'Doppelgänger', cat: 'social', icon: '\u{1F46F}', flavor: 'Follow a reader with a 90%+ DNA match from the Discover tab.', clue: 'You looked in the mirror and saw a stranger.', hidden: false, secret: false },
     soc_socialite: { name: 'The Socialite', cat: 'social', icon: '\u{1F942}', flavor: 'Become an active member of 3 or more book clubs.', clue: 'You danced in many circles at once.', hidden: false, secret: false },

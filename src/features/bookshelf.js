@@ -103,7 +103,7 @@ export function renderEmptyState(show) {
   let title, text, actions;
   if (isBrandNew) {
     title = 'Your shelf is empty';
-    text = 'Welcome to ShelfLife — your personal reading record. Add the first book you read this year, or explore a sample shelf to see how it works.';
+    text = 'Welcome to Note to Shelf — your personal reading record. Add the first book you read this year, or explore a sample shelf to see how it works.';
     actions = `<button class="btn-primary" onclick="App.openAddBookModalFromMenu()">📚 Add Your First Book</button>`;
   } else {
     const prev = otherYears[0];
@@ -2245,6 +2245,14 @@ export function switchHubTab(tabId) {
       const b = (app && app.editingBook) || {};
       const selectedMonth = b.month || curMonth;
       mSelect.innerHTML = ALL_MONTHS.map(m => `<option value="${m}"${m === selectedMonth ? ' selected' : ''}>${m}</option>`).join('');
+    }
+    const fSent = document.getElementById('finishSentimentSelector');
+    if (fSent) {
+      const app = (typeof window !== 'undefined' && window.App) || this;
+      const b = (app && app.editingBook) || {};
+      const curSent = b.sentiment || 'mixed';
+      fSent.className = 'sentiment-selector';
+      fSent.innerHTML = SENT_ORDER.map(s => `<div class="sentiment-opt${curSent === s ? ' selected' : ''}" data-s="${s}" onclick="document.querySelectorAll('#finishSentimentSelector .sentiment-opt').forEach(o=>o.classList.remove('selected'));if(this&&this.classList)this.classList.add('selected');"><span>${LABELS[s]}</span></div>`).join('');
     }
   }
 }

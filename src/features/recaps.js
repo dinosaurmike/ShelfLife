@@ -205,7 +205,7 @@ export async function openMonthlyRecap(requestedMonth, requestedYear) {
     // Branding watermark
     ctx.font = '700 16px "DM Mono", monospace';
     ctx.fillStyle = 'rgba(240,210,140,0.5)';
-    ctx.fillText('dinomike.ca/shelflife', 72, 540);
+    ctx.fillText('dinomike.ca/notetoshelf', 72, 540);
 
     const dataUrl = canvas.toDataURL('image/png');
     this._showRecapModal(dataUrl, `${monthName} ${monthYear}`, monthName, monthYear);
@@ -607,8 +607,8 @@ export function _buildWrappedSlides(d) {
   const escStr = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   const wm = (full) => full
-    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://dinomike.ca/shelflife" target="_blank" rel="noopener">Track your reading at <strong>dinomike.ca/shelflife</strong></a></div>`
-    : `<div class="wrapped-wm"><a href="https://dinomike.ca/shelflife" target="_blank" rel="noopener">dinomike.ca/shelflife</a></div>`;
+    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener">Track your reading at <strong>dinomike.ca/notetoshelf</strong></a></div>`
+    : `<div class="wrapped-wm"><a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener">dinomike.ca/notetoshelf</a></div>`;
 
   const sentBar = (counts, total) => {
     if (!total) return '';
@@ -773,8 +773,8 @@ export function _buildWrappedSlides(d) {
           <span>📋 Copy Text</span>
         </button>
       </div>
-      <a href="https://dinomike.ca/shelflife" target="_blank" rel="noopener" class="cinematic-sub-link">
-        ShelfLife · A personal sanctuary for readers
+      <a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener" class="cinematic-sub-link">
+        Note to Shelf · A personal sanctuary for readers
       </a>
     </div>
   </div>`);
@@ -922,7 +922,7 @@ export function downloadWrappedImage() {
 export function shareWrappedText() {
   const d = this._wrappedData;
   if (!d) return;
-  const text = `📚 My ${d.year} Reading Year: ${d.totalBooks} books, ${fmtWords(d.totalWords)} words. Built with ShelfLife.`;
+  const text = `📚 My ${d.year} Reading Year: ${d.totalBooks} books, ${fmtWords(d.totalWords)} words. Built with Note to Shelf.`;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => this.showToast('Summary copied to clipboard!'));
   }

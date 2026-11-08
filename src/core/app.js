@@ -468,14 +468,14 @@ export const App = {
     const brandEl = document.getElementById('brandTitle');
     if (!brandEl) return;
 
-    brandEl.textContent = 'ShelfLife';
+    brandEl.textContent = 'Note to Shelf';
     if (this.isReadOnly && !this.isDemoMode) {
       const sharedName = this.ownerDisplayName || this.displayName || '';
-      document.title = sharedName ? `ShelfLife • ${sharedName}'s Shelf` : 'ShelfLife';
+      document.title = sharedName ? `Note to Shelf • ${sharedName}'s Shelf` : 'Note to Shelf';
     } else if (this.displayName) {
-      document.title = `ShelfLife • ${this.displayName}`;
+      document.title = `Note to Shelf • ${this.displayName}`;
     } else {
-      document.title = 'ShelfLife';
+      document.title = 'Note to Shelf';
     }
   },
 
@@ -1142,8 +1142,8 @@ export const App = {
     const bh = document.getElementById('booksHeader');
     if (bh) bh.textContent = 'My Shelf';
     const brandEl = document.getElementById('brandTitle');
-    if (brandEl) brandEl.textContent = 'ShelfLife';
-    document.title = 'ShelfLife';
+    if (brandEl) brandEl.textContent = 'Note to Shelf';
+    document.title = 'Note to Shelf';
     if (typeof this.updateBrandTitle === 'function') this.updateBrandTitle();
     if (typeof this.updateMastheadTitle === 'function') this.updateMastheadTitle();
     if (typeof this.render === 'function') this.render();
@@ -2349,7 +2349,7 @@ export const App = {
         if (typeof this._earnAchievement === 'function') this._earnAchievement('soc_penPal');
         if (typeof this._earnAchievement === 'function') this._earnAchievement('soc_airplane');
         if (typeof this._sendPushNotif === 'function') {
-          this._sendPushNotif(recipientId, 'notes', '📖 ShelfLife', (this.displayName || 'A reader') + ' sent you a book note about ' + book.title);
+          this._sendPushNotif(recipientId, 'notes', '📖 Note to Shelf', (this.displayName || 'A reader') + ' sent you a book note about ' + book.title);
         }
       } else {
         if (msg) msg.textContent = 'Could not send. Please try again.';
@@ -3527,7 +3527,7 @@ async recordMilestones() {
     return `"${str}"`;
   },
 
-  _downloadCSV(records, filename = 'shelflife_library.csv') {
+  _downloadCSV(records, filename = 'notetoshelf_library.csv') {
     const headers = ['Title', 'Author', 'ISBN', 'Words', 'Estimated', 'Rating', 'Sentiment', 'Date Read', 'Year', 'Month', 'Format', 'Genre', 'Days', 'Fiction', 'Re-read', 'Review', 'Notes', 'Quote'];
     const rows = records.map(r => [
       this._csvCell(r.title),
@@ -3553,7 +3553,7 @@ async recordMilestones() {
     this._triggerDownload(new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }), filename);
   },
 
-  _downloadJSON(records, filename = 'shelflife_library.json') {
+  _downloadJSON(records, filename = 'notetoshelf_library.json') {
     const jsonContent = JSON.stringify({
       version: '1.0',
       exportDate: new Date().toISOString(),
@@ -3638,7 +3638,7 @@ async recordMilestones() {
       const records = books.map(b => this._bookToExportRecord(b));
       const yrLabel = yearScope === 'all' ? 'all_years' : String(this.currentYear);
       const stamp = new Date().toISOString().slice(0, 10);
-      const filename = `shelflife_${yrLabel}_${stamp}.${format}`;
+      const filename = `notetoshelf_${yrLabel}_${stamp}.${format}`;
 
       if (format === 'json') {
         this._downloadJSON(records, filename);
@@ -4063,7 +4063,7 @@ async recordMilestones() {
         { id: 'soc_geneticist', name: 'Geneticist', icon: '\u{1F9EC}', desc: 'You decided who you want to become.', req: 'Shape your target DNA profile.', isSecret: false, isHidden: false },
         { id: 'soc_recruiter', name: 'The Recruiter', icon: '\u{1F4EF}', desc: 'You called others to the round table.', req: 'Invite someone to your book club.', isSecret: false, isHidden: false },
         { id: 'soc_founder', name: 'The Founder', icon: '\u{1F3DB}\u{FE0F}', desc: 'You laid the first stone of a new society.', req: 'Create a book club.', isSecret: false, isHidden: false },
-        { id: 'soc_evangelist', name: 'The Evangelist', icon: '\u{1F54A}\u{FE0F}', desc: 'You opened the doors for a newcomer.', req: 'Invite a friend to join ShelfLife.', isSecret: false, isHidden: false },
+        { id: 'soc_evangelist', name: 'The Evangelist', icon: '\u{1F54A}\u{FE0F}', desc: 'You opened the doors for a newcomer.', req: 'Invite a friend to join Note to Shelf.', isSecret: false, isHidden: false },
         { id: 'soc_tastemaker', name: 'The Tastemaker', icon: '\u{1F377}', desc: 'They listened to your wisdom.', req: 'Someone read a book you recommended to them via a note.', isSecret: false, isHidden: false },
         { id: 'soc_doppelganger', name: 'Doppelgänger', icon: '\u{1F46F}', desc: 'You looked in the mirror and saw a stranger.', req: 'Follow a reader with a 90%+ DNA match from the Discover tab.', isSecret: false, isHidden: false },
         { id: 'soc_socialite', name: 'The Socialite', icon: '\u{1F942}', desc: 'You danced in many circles at once.', req: 'Become an active member of 3 or more book clubs.', isSecret: false, isHidden: false },

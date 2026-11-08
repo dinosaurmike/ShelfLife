@@ -3815,8 +3815,8 @@ ${!isMember ? `
     const bh = document.getElementById('booksHeader');
     if (bh) bh.textContent = 'My Shelf';
     const brandEl = document.getElementById('brandTitle');
-    if (brandEl) brandEl.textContent = 'ShelfLife';
-    document.title = 'ShelfLife';
+    if (brandEl) brandEl.textContent = 'Note to Shelf';
+    document.title = 'Note to Shelf';
     if (typeof App.updateBrandTitle === 'function') App.updateBrandTitle();
     if (typeof App.updateMastheadTitle === 'function') App.updateMastheadTitle();
     if (typeof App.render === 'function') App.render();

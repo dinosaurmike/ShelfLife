@@ -1062,8 +1062,8 @@ export function _buildWrappedSlides(d) {
   const escStr = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   const wm = (full) => full
-    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://dinomike.ca/shelflife" target="_blank" rel="noopener">Track your reading at <strong>dinomike.ca/shelflife</strong></a></div>`
-    : `<div class="wrapped-wm"><a href="https://dinomike.ca/shelflife" target="_blank" rel="noopener">dinomike.ca/shelflife</a></div>`;
+    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener">Track your reading at <strong>dinomike.ca/notetoshelf</strong></a></div>`
+    : `<div class="wrapped-wm"><a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener">dinomike.ca/notetoshelf</a></div>`;
 
   const sentBar = (counts, total) => {
     if (!total) return '';
@@ -1230,8 +1230,8 @@ export function _buildWrappedSlides(d) {
           <span>📋 Copy Text</span>
         </button>
       </div>
-      <a href="https://dinomike.ca/shelflife" target="_blank" rel="noopener" class="cinematic-sub-link">
-        ShelfLife · A personal sanctuary for readers
+      <a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener" class="cinematic-sub-link">
+        Note to Shelf · A personal sanctuary for readers
       </a>
     </div>
   </div>`);
@@ -1379,7 +1379,7 @@ export function downloadWrappedImage() {
 export function shareWrappedText() {
   const d = this._wrappedData;
   if (!d) return;
-  const text = `📚 My ${d.year} Reading Year: ${d.totalBooks} books, ${fmtWords(d.totalWords)} words. Built with ShelfLife.`;
+  const text = `📚 My ${d.year} Reading Year: ${d.totalBooks} books, ${fmtWords(d.totalWords)} words. Built with Note to Shelf.`;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => this.showToast('Summary copied to clipboard!'));
   }
@@ -1569,7 +1569,7 @@ export async function openMonthlyRecap(requestedMonth, requestedYear) {
     // Branding watermark
     ctx.font = '700 16px "DM Mono", monospace';
     ctx.fillStyle = 'rgba(240,210,140,0.5)';
-    ctx.fillText('dinomike.ca/shelflife', 72, 540);
+    ctx.fillText('dinomike.ca/notetoshelf', 72, 540);
 
     const dataUrl = canvas.toDataURL('image/png');
     const modalTitle = (this.isReadOnly && this.ownerDisplayName) ? `${this.ownerDisplayName}'s ${monthName} ${monthYear} Recap` : `${monthName} ${monthYear}`;
@@ -2200,7 +2200,7 @@ export async function _renderShareCanvas(format) {
   ctx.fillStyle = 'rgba(139,99,67,0.9)';
   ctx.font = "600 25px 'DM Mono', monospace";
   ctx.save();
-  const _wmTop = 'dinomike.ca/shelflife';
+  const _wmTop = 'dinomike.ca/notetoshelf';
   const _twL = ctx.measureText(_wmTop).width;
   ctx.fillText(_wmTop, W / 2, Math.round(topH * 0.30));
 
@@ -2411,7 +2411,7 @@ export async function _renderShareCanvas(format) {
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(139,99,67,' + wmAlpha + ')';
   ctx.font = "600 " + (sq ? 24 : 26) + "px 'DM Mono', monospace";
-  ctx.fillText((p.highlights && p.highlights.fullWatermark ? 'Track your reading  ·  ' : '') + 'dinomike.ca/shelflife', W / 2, wmY);
+  ctx.fillText((p.highlights && p.highlights.fullWatermark ? 'Track your reading  ·  ' : '') + 'dinomike.ca/notetoshelf', W / 2, wmY);
 
   return canvas;
 }
@@ -2454,7 +2454,7 @@ export async function shareDownloadImage(format) {
               await navigator.share({
                 files: [file],
                 title: title,
-                text: `${title} · ${p.totalBooks || 0} books tracked on ShelfLife 📚`
+                text: `${title} · ${p.totalBooks || 0} books tracked on Note to Shelf 📚`
               });
               sharedViaNativeSheet = true;
               if (typeof DB !== 'undefined' && DB && typeof DB.trackEvent === 'function') {
@@ -2522,7 +2522,7 @@ export async function shareInstagramStories() {
 export function shareToPlatform(platform) {
   const url = encodeURIComponent(this._shareLink());
   const p = (typeof this._sharePayload === 'function') ? this._sharePayload() : { year: this.currentYear || new Date().getFullYear(), totalBooks: 0, totalWords: 0 };
-  const text = encodeURIComponent('My ' + p.year + ' reading year: ' + p.totalBooks + ' books, ' + fmtWords(p.totalWords) + ' words. Tracked with ShelfLife 📚');
+  const text = encodeURIComponent('My ' + p.year + ' reading year: ' + p.totalBooks + ' books, ' + fmtWords(p.totalWords) + ' words. Tracked with Note to Shelf 📚');
   let target = '';
   if (platform === 'facebook') target = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
   else if (platform === 'twitter') target = 'https://twitter.com/intent/tweet?text=' + text + '&url=' + url;

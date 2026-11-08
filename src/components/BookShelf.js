@@ -52,13 +52,13 @@ export function scaleW(words, maxWords = 240000) {
 export function sColor(sentiment) {
   switch (sentiment) {
     case 'love':
-      return 'linear-gradient(180deg, #d946ef 0%, #a855f7 100%)';
+      return 'linear-gradient(180deg, #1c3f78 0%, #2563eb 100%)';
     case 'like':
-      return 'linear-gradient(180deg, #3b82f6 0%, #2563eb 100%)';
+      return 'linear-gradient(180deg, #1e5c3a 0%, #10b981 100%)';
     case 'mixed':
       return 'linear-gradient(180deg, #f59e0b 0%, #d97706 100%)';
     case 'dislike':
-      return 'linear-gradient(180deg, #ef4444 0%, #b91c1c 100%)';
+      return 'linear-gradient(180deg, #ef4444 0%, #8c1a28 100%)';
     default:
       return 'linear-gradient(180deg, #64748b 0%, #475569 100%)';
   }
