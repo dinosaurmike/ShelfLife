@@ -1,33 +1,34 @@
-# ── Note to Shelf — Netlify Redirects ───────────────────────────
-# Legacy URL redirects (old bookapp, ShelfLife, and ShelfCare paths → NoteToShelf)
-/bookapp.html         /NoteToShelf/index.html   301
-/bookapp/bookapp     /NoteToShelf/index.html   301
-/bookapp/bookapp.html /NoteToShelf/index.html  301
-/bookapp/*           /NoteToShelf/:splat       301
+# ShelfLife: Netlify Redirects & SPA Routing (shelflife.love)
 
-/shelflife           /NoteToShelf/index.html   301
-/shelflife/*         /NoteToShelf/:splat       301
-/ShelfLife           /NoteToShelf/index.html   301
-/ShelfLife/*         /NoteToShelf/:splat       301
-
-/shelfcare           /NoteToShelf/index.html   301
-/shelfcare/*         /NoteToShelf/:splat       301
-/ShelfCare           /NoteToShelf/index.html   301
-/ShelfCare/*         /NoteToShelf/:splat       301
-
-/notetoshelf         /NoteToShelf/index.html   301
-/notetoshelf/*       /NoteToShelf/:splat       301
-
-# Direct Multi-Page Admin routes (exempt from SPA fallback)
-/NoteToShelf/analytics.html   /analytics.html       200
-/NoteToShelf/analytics        /analytics.html       200
-/NoteToShelf/laseroutput.html /laseroutput.html     200
-/NoteToShelf/laseroutput      /laseroutput.html     200
-
+# Direct Multi-Page routes (exempt from SPA fallback)
 /analytics.html               /analytics.html       200
 /analytics                    /analytics.html       200
 /laseroutput.html             /laseroutput.html     200
 /laseroutput                  /laseroutput.html     200
+/reading_tree.html            /reading_tree.html    200
+/reading_tree                 /reading_tree.html    200
+/privacy.html                 /privacy.html         200
+/privacy                      /privacy.html         200
+/clear_cache.html             /clear_cache.html     200
+/clear_cache                  /clear_cache.html     200
 
-# SPA / hash-routing fallback: serve index.html for NoteToShelf
-/NoteToShelf/*       /NoteToShelf/index.html   200
+# Support scripts for Laser Output & Barcode Scanning
+/hershey.js                   /hershey.js           200
+/qrcode.js                    /qrcode.js            200
+
+# Legacy path aliases on the new domain (redirecting old subpaths to root)
+/NoteToShelf/analytics.html   /analytics.html       301
+/NoteToShelf/laseroutput.html /laseroutput.html     301
+/NoteToShelf/reading_tree.html /reading_tree.html   301
+/NoteToShelf/privacy.html     /privacy.html         301
+/NoteToShelf/*                /:splat               301
+/NoteToShelf                  /                     301
+/shelflife/*                  /:splat               301
+/shelflife                    /                     301
+/ShelfLife/*                  /:splat               301
+/ShelfLife                    /                     301
+/bookapp/*                    /:splat               301
+/bookapp.html                 /                     301
+
+# Root SPA / hash-routing fallback: serve index.html for all paths
+/*                            /index.html           200

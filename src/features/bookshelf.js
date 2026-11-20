@@ -103,7 +103,7 @@ export function renderEmptyState(show) {
   let title, text, actions;
   if (isBrandNew) {
     title = 'Your shelf is empty';
-    text = 'Welcome to Note to Shelf — your personal reading record. Add the first book you read this year, or explore a sample shelf to see how it works.';
+    text = 'Welcome to ShelfLife, your personal reading record. Add the first book you read this year, or explore a sample shelf to see how it works.';
     actions = `<button class="btn-primary" onclick="App.openAddBookModalFromMenu()">📚 Add Your First Book</button>`;
   } else {
     const prev = otherYears[0];

@@ -877,26 +877,26 @@ export function _computePersonality(books) {
   if (classicPct >= 0.35) push('classicist','The Classicist','Gravitating to literature that has weathered generations.', 1.68 + classicPct * 0.5);
   if (contemporaryPct >= 0.50) push('trendspotter','The Trendspotter','Always reading on the cutting edge of new releases.', 1.62 + contemporaryPct * 0.5);
 
-  if (avgDays > 0 && avgDays < 5) push('speedDemon','Speed Demon','You devour books — just '+avgDays.toFixed(1)+' days each on average.', 1.72 + (5 - avgDays)*0.15);
-  if (avgWords > 110000) push('deepDiver','Deep Diver','You gravitate to doorstoppers — '+Math.round(avgWords/1000)+'K words per book.', 1.70 + Math.min(0.5, (avgWords - 110000)/100000));
-  if (total >= 20) push('voracious','The Voracious Reader','An insatiable literary appetite — '+total+' books and counting.', 1.65 + Math.min(0.5, (total - 20) * 0.02));
+  if (avgDays > 0 && avgDays < 5) push('speedDemon','Speed Demon','You devour books, averaging just '+avgDays.toFixed(1)+' days each.', 1.72 + (5 - avgDays)*0.15);
+  if (avgWords > 110000) push('deepDiver','Deep Diver','You gravitate to doorstoppers, averaging '+Math.round(avgWords/1000)+'K words per book.', 1.70 + Math.min(0.5, (avgWords - 110000)/100000));
+  if (total >= 20) push('voracious','The Voracious Reader','An insatiable literary appetite: '+total+' books and counting.', 1.65 + Math.min(0.5, (total - 20) * 0.02));
 
   if (topAuthorCount >= 3 || (topAuthorCount >= 2 && topAuthorCount / total >= 0.35)) push('authorLoyalist','The Author Loyalist','When you love an author, you dive into their entire universe.', 1.66 + (topAuthorCount / total) * 0.5);
   if (uniqueGenres >= 4 && topGenrePct <= 0.35) push('genreDrifter','Genre Drifter','You roam freely across '+uniqueGenres+' genres, never settling down.', 1.65 + uniqueGenres*0.05);
   if (lovePct >= 0.55 && total >= 4) push('optimist','The Generous Reader','You read with an open heart and find pure magic in almost every story.', 1.62 + lovePct * 0.4);
   if (toughPct >= 0.35 && total >= 4) push('toughCritic','Tough Critic','You hold every book to a discerning, unapologetic standard.', 1.62 + toughPct * 0.5);
   if (rereadPct >= 0.25 || rereads >= 2) push('comfortReader','The Comfort Reader','Returning to cherished favorites like visiting lifelong friends.', 1.60 + rereadPct * 0.6);
-  if (total >= 6 && dnf/total < 0.05) push('completionist','Completionist','You finish what you start — unwavering follow-through.', 1.50 + (1 - dnf/total)*0.25);
+  if (total >= 6 && dnf/total < 0.05) push('completionist','Completionist','You finish what you start, with unwavering follow-through.', 1.50 + (1 - dnf/total)*0.25);
   if (eraCount >= 3 || uniqueGenres >= 6) push('globalReader','Global Reader','You range far and wide across genres, eras, and perspectives.', 1.55 + eraCount*0.10 + uniqueGenres*0.02);
   if (streak >= 5) push('streakKeeper','Streak Keeper','You kept the pages turning '+streak+' months straight.', 1.45 + streak*0.05);
 
   // Formats (Balanced so they reflect format preference without steamrolling reading habits)
-  if (physicalPct > 0.75) push('traditionalist','Traditionalist','Paper and ink, always — '+Math.round(physicalPct*100)+'% physical books.', 1.15 + physicalPct * 0.25);
-  if (audioPct > 0.55) push('listener','The Listener','You read with your ears — '+Math.round(audioPct*100)+'% audiobooks.', 1.15 + audioPct * 0.30);
-  if (ebookPct > 0.55) push('digitalNative','Digital Native','Your whole library lives on a screen — '+Math.round(ebookPct*100)+'% ebooks.', 1.15 + ebookPct * 0.25);
+  if (physicalPct > 0.75) push('traditionalist','Traditionalist','Paper and ink, always: '+Math.round(physicalPct*100)+'% physical books.', 1.15 + physicalPct * 0.25);
+  if (audioPct > 0.55) push('listener','The Listener','You read with your ears: '+Math.round(audioPct*100)+'% audiobooks.', 1.15 + audioPct * 0.30);
+  if (ebookPct > 0.55) push('digitalNative','Digital Native','Your whole library lives on a screen: '+Math.round(ebookPct*100)+'% ebooks.', 1.15 + ebookPct * 0.25);
 
   A.sort((a,b)=>b.score - a.score);
-  let result = A.length ? A : [{ id:'wildCard', name:'Wild Card', tagline:'Your reading defies every pattern — utterly unpredictable.', score:1 }];
+  let result = A.length ? A : [{ id:'wildCard', name:'Wild Card', tagline:'Your reading defies every pattern: utterly unpredictable.', score:1 }];
 
   const primary = result[0];
   const secondary = (result[1] && result[1].score >= 1.25) ? result[1] : null;
@@ -1062,8 +1062,8 @@ export function _buildWrappedSlides(d) {
   const escStr = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   const wm = (full) => full
-    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener">Track your reading at <strong>dinomike.ca/notetoshelf</strong></a></div>`
-    : `<div class="wrapped-wm"><a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener">dinomike.ca/notetoshelf</a></div>`;
+    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://shelflife.love" target="_blank" rel="noopener">Track your reading at <strong>shelflife.love</strong></a></div>`
+    : `<div class="wrapped-wm"><a href="https://shelflife.love" target="_blank" rel="noopener">shelflife.love</a></div>`;
 
   const sentBar = (counts, total) => {
     if (!total) return '';
@@ -1095,7 +1095,7 @@ export function _buildWrappedSlides(d) {
       <div class="wrapped-stat-divider"></div>
       <div class="wrapped-stat-cell"><div class="wrapped-big-number wrapped-words-num" data-countup-fmt="${d.totalWords}">${fmtNum(0)}</div><div class="wrapped-label">words read</div></div>
     </div>
-    <div class="wrapped-subtitle">${posPct}% of your reads landed as a hit — and you truly <strong>loved</strong> ${lovePct}%.</div>
+    <div class="wrapped-subtitle">${posPct}% of your reads landed as a hit, and you truly <strong>loved</strong> ${lovePct}%.</div>
     ${sentBar(d.sentCounts, d.totalBooks)}
     ${wm()}
   </div>`);
@@ -1105,7 +1105,7 @@ export function _buildWrappedSlides(d) {
   slides.push(`<div class="wrapped-content">
     <div class="wrapped-emoji">${d.readingPersonality === 'Year-Round Consistent' ? '🔁' : (seasonEmoji[d.topSeason]||'📅')}</div>
     <div class="wrapped-title">Your Reading Patterns</div>
-    <div class="wrapped-subtitle">${d.readingPersonality === 'Year-Round Consistent' ? 'You read steadily all year — no season slowed you down.' : `${d.seasonPct}% of your reading happened in <strong>${d.topSeason}</strong> — that's your power season.`}</div>
+    <div class="wrapped-subtitle">${d.readingPersonality === 'Year-Round Consistent' ? 'You read steadily all year: no season slowed you down.' : `${d.seasonPct}% of your reading happened in <strong>${d.topSeason}</strong>, that's your power season.`}</div>
     <div class="wrapped-insight-card">
       <div class="wrapped-insight-title">Top Genres</div>
       ${d.topGenres.map(([g,c]) => { const pct = Math.round(c/d.totalBooks*100); return `<div class="wrapped-genre-row"><span class="wrapped-genre-name">${escStr(g)}</span><div class="wrapped-genre-track"><div class="wrapped-genre-fill" style="width:${pct}%;"></div></div><span class="wrapped-genre-count">${c}</span></div>`; }).join('')}
@@ -1118,7 +1118,7 @@ export function _buildWrappedSlides(d) {
   slides.push(`<div class="wrapped-content">
     <div class="wrapped-emoji">${d.pacingEmoji}</div>
     <div class="wrapped-title">${d.pacingInsight}</div>
-    <div class="wrapped-subtitle">${d.pacingInsight === 'Binge Reader' ? `You averaged just <strong>${d.avgDays} days</strong> per book. Unstoppable.` : d.pacingInsight === 'Steady Pacer' ? `<strong>${d.avgDays} days</strong> per book — a steady, sustainable rhythm.` : `You savored each book over <strong>${d.avgDays} days</strong>. Every page counted.`}</div>
+    <div class="wrapped-subtitle">${d.pacingInsight === 'Binge Reader' ? `You averaged just <strong>${d.avgDays} days</strong> per book. Unstoppable.` : d.pacingInsight === 'Steady Pacer' ? `<strong>${d.avgDays} days</strong> per book: a steady, sustainable rhythm.` : `You savored each book over <strong>${d.avgDays} days</strong>. Every page counted.`}</div>
     <div class="wrapped-insight-card">
       <div class="wrapped-insight-title">Your Peak Month</div>
       <div class="wrapped-insight-value">${d.peakMonth}</div>
@@ -1186,7 +1186,7 @@ export function _buildWrappedSlides(d) {
         <div class="wrapped-cover-fallback"><span>${escStr((fav.title||'?').charAt(0))}</span></div>
       </div>
     </div>
-    <div class="wrapped-boty-title">${escStr(fav.title||'—')}</div>
+    <div class="wrapped-boty-title">${escStr(fav.title||'Untitled')}</div>
     <div class="wrapped-subtitle">by ${escStr(fav.author||'Unknown')}</div>
     ${botyChangeBtn}
     ${fav.review ? `<div class="wrapped-insight-card"><div class="wrapped-insight-title">In your words</div><div class="wrapped-review-quote">“${escStr(fav.review.substring(0,180))}${fav.review.length>180?'…':''}”</div></div>` : ''}
@@ -1230,8 +1230,8 @@ export function _buildWrappedSlides(d) {
           <span>📋 Copy Text</span>
         </button>
       </div>
-      <a href="https://dinomike.ca/notetoshelf" target="_blank" rel="noopener" class="cinematic-sub-link">
-        Note to Shelf · A personal sanctuary for readers
+      <a href="https://shelflife.love" target="_blank" rel="noopener" class="cinematic-sub-link">
+        ShelfLife · A personal sanctuary for readers
       </a>
     </div>
   </div>`);
@@ -1569,7 +1569,7 @@ export async function openMonthlyRecap(requestedMonth, requestedYear) {
     // Branding watermark
     ctx.font = '700 16px "DM Mono", monospace';
     ctx.fillStyle = 'rgba(240,210,140,0.5)';
-    ctx.fillText('dinomike.ca/notetoshelf', 72, 540);
+    ctx.fillText('shelflife.love', 72, 540);
 
     const dataUrl = canvas.toDataURL('image/png');
     const modalTitle = (this.isReadOnly && this.ownerDisplayName) ? `${this.ownerDisplayName}'s ${monthName} ${monthYear} Recap` : `${monthName} ${monthYear}`;
@@ -2200,7 +2200,7 @@ export async function _renderShareCanvas(format) {
   ctx.fillStyle = 'rgba(139,99,67,0.9)';
   ctx.font = "600 25px 'DM Mono', monospace";
   ctx.save();
-  const _wmTop = 'dinomike.ca/notetoshelf';
+  const _wmTop = 'shelflife.love';
   const _twL = ctx.measureText(_wmTop).width;
   ctx.fillText(_wmTop, W / 2, Math.round(topH * 0.30));
 
@@ -2411,7 +2411,7 @@ export async function _renderShareCanvas(format) {
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(139,99,67,' + wmAlpha + ')';
   ctx.font = "600 " + (sq ? 24 : 26) + "px 'DM Mono', monospace";
-  ctx.fillText((p.highlights && p.highlights.fullWatermark ? 'Track your reading  ·  ' : '') + 'dinomike.ca/notetoshelf', W / 2, wmY);
+  ctx.fillText((p.highlights && p.highlights.fullWatermark ? 'Track your reading  ·  ' : '') + 'shelflife.love', W / 2, wmY);
 
   return canvas;
 }
@@ -2508,7 +2508,7 @@ export async function shareDownloadImage(format) {
 
 export async function shareInstagramStories() {
   await this.shareDownloadImage('story');
-  const msg = 'Image saved — open Instagram and add it to your Story!';
+  const msg = 'Image saved: open Instagram and add it to your Story!';
   if (typeof this.showToast === 'function') {
     this.showToast(msg, 'sticky');
   } else if (typeof showToast === 'function') {
