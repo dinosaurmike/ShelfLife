@@ -513,7 +513,7 @@ export const App = {
           skelEl.appendChild(notice);
         }
       }
-    }, 2800);
+    }, 4500);
 
     this.userId = user.id;
     this.userEmail = user.email || '';
@@ -867,7 +867,7 @@ export const App = {
               this.openWelcomeExperience();
             }
           } catch (e) {}
-        }, showSplash ? 2800 : 700);
+        }, showSplash ? 4300 : 700);
       }
     }
   },

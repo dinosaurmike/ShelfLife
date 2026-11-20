@@ -238,11 +238,11 @@ export function showAnimatedSplash(onComplete) {
     targets.forEach(el => el.classList.add('animate-fill'));
   }, 600));
 
-  // Step 4: Graceful dismissal
+  // Step 4: Graceful dismissal (linger on the complete logo & glowing heart)
   window.splashTimeouts.push(setTimeout(() => {
     dismissSplash(false);
     if (typeof onComplete === 'function') onComplete();
-  }, 2800));
+  }, 4300));
 }
 
 export function replayAnimation() {
@@ -262,7 +262,7 @@ export function dismissSplash(fast = false) {
 
   const startTime = (typeof window !== 'undefined' && window.splashStartTime) ? window.splashStartTime : Date.now();
   const elapsed = Date.now() - startTime;
-  const minDuration = fast ? 0 : 2800;
+  const minDuration = fast ? 0 : 4300;
   const remaining = Math.max(0, minDuration - elapsed);
 
   setTimeout(() => {
