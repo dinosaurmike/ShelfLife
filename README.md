@@ -54,7 +54,7 @@ Created by **Mike Warren** ([@dinosaurmike](https://github.com/dinosaurmike)).
 
 ## Try it
 
-ShelfLife runs at **<https://dinomike.ca/shelflife>**. Open it on your phone or computer, sign in
+ShelfLife runs at **<https://shelflife.love>**. Open it on your phone or computer, sign in
 with Google (or view the demo shelf), and use your browser's **Install** / **Add to Home Screen**
 to keep it as an app.
 
