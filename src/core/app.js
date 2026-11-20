@@ -468,14 +468,14 @@ export const App = {
     const brandEl = document.getElementById('brandTitle');
     if (!brandEl) return;
 
-    brandEl.textContent = 'Note to Shelf';
+    brandEl.textContent = 'Shelf Life';
     if (this.isReadOnly && !this.isDemoMode) {
       const sharedName = this.ownerDisplayName || this.displayName || '';
-      document.title = sharedName ? `Note to Shelf • ${sharedName}'s Shelf` : 'Note to Shelf';
+      document.title = sharedName ? `Shelf Life • ${sharedName}'s Shelf` : 'Shelf Life';
     } else if (this.displayName) {
-      document.title = `Note to Shelf • ${this.displayName}`;
+      document.title = `Shelf Life • ${this.displayName}`;
     } else {
-      document.title = 'Note to Shelf';
+      document.title = 'Shelf Life';
     }
   },
 

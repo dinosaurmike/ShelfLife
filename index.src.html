@@ -5723,6 +5723,7 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       --text-dark: #3e2723;
       --burgundy: #8B2635;
       --logo-bg: #FAF8F5;
+      --heart-pink: #F4ACB7;
     }
 
     .splash-container {
@@ -5796,6 +5797,10 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
     .animate-fill .cutout {
       fill: var(--logo-bg);
       stroke: transparent;
+    }
+
+    .animate-fill .cutout.heart-cutout {
+      fill: var(--heart-pink);
     }
 
     /* Scale the logo down slightly for weight and change to a soft drop shadow */
@@ -5897,12 +5902,12 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
     .word-heart-tag .heart {
       font-size: 20px;
       line-height: 1;
-      color: var(--gold);
+      color: var(--heart-pink);
       opacity: 0;
       transform: scale(0.3);
       transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       transition-delay: 0.82s;
-      filter: drop-shadow(0 0 5px rgba(197, 155, 39, 0.6));
+      filter: drop-shadow(0 0 6px rgba(244, 172, 183, 0.7));
     }
 
     .animate-text .word-heart-tag .heart {
@@ -5912,8 +5917,8 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
     }
 
     @keyframes heartGlow {
-      0% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(197, 155, 39, 0.4)); }
-      100% { transform: scale(1.16); filter: drop-shadow(0 0 8px rgba(230, 184, 59, 0.8)); }
+      0% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(244, 172, 183, 0.4)); }
+      100% { transform: scale(1.16); filter: drop-shadow(0 0 9px rgba(244, 172, 183, 0.95)); }
     }
 
     /* Subtitle branding */
@@ -6030,6 +6035,12 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
         transition: none !important;
         transition-delay: 0s !important;
       }
+      .splash-static .cutout.heart-cutout {
+        fill: var(--heart-pink) !important;
+      }
+      .splash-static .word-heart-tag .heart {
+        color: var(--heart-pink) !important;
+      }
       .splash-static-loader {
         display: none;
         align-items: center;
@@ -6060,8 +6071,8 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
     <path class="bookmark-fill" d="M 128 64 C 128 46 142 32 160 32 L 352 32 C 370 32 384 46 384 64 L 384 480 L 256 384 L 128 480 Z" />
     <path class="logo-outline trace-only" d="M 256 32 L 160 32 C 142 32 128 46 128 64 L 128 480 L 256 384" />
     <path class="logo-outline trace-only" d="M 256 384 L 384 480 L 384 64 C 384 46 370 32 352 32 L 256 32" />
-    <!-- Heart Punch cutout -->
-    <path class="logo-outline cutout" d="M 256 86 C 256 72, 234 68, 232 86 C 230 104, 246 112, 256 123 C 266 112, 282 104, 280 86 C 278 68, 256 72, 256 86 Z" />
+    <!-- Heart Punch cutout (Pastel Pink) -->
+    <path class="logo-outline cutout heart-cutout" d="M 256 86 C 256 72, 234 68, 232 86 C 230 104, 246 112, 256 123 C 266 112, 282 104, 280 86 C 278 68, 256 72, 256 86 Z" />
     <!-- Open Book cutout -->
     <path class="logo-outline cutout" transform="translate(0, -47)" d="M 176 256 C 210 230 240 250 256 272 C 272 250 302 230 336 256 L 336 336 C 302 310 272 330 256 360 C 240 330 210 310 176 336 Z" />
   </svg>
@@ -6107,7 +6118,7 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
     <a href="javascript:void(0)" class="landing-logo">
       <svg viewBox="128 32 256 448" class="landing-bookmark-icon" width="30" height="42" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M 128 64 C 128 46 142 32 160 32 L 352 32 C 370 32 384 46 384 64 L 384 480 L 256 384 L 128 480 Z" fill="#8B2635" />
-        <path d="M 256 86 C 256 72, 234 68, 232 86 C 230 104, 246 112, 256 123 C 266 112, 282 104, 280 86 C 278 68, 256 72, 256 86 Z" fill="#FAF8F5" />
+        <path d="M 256 86 C 256 72, 234 68, 232 86 C 230 104, 246 112, 256 123 C 266 112, 282 104, 280 86 C 278 68, 256 72, 256 86 Z" fill="#F4ACB7" />
         <path transform="translate(0, -47)" d="M 176 256 C 210 230 240 250 256 272 C 272 250 302 230 336 256 L 336 336 C 302 310 272 330 256 360 C 240 330 210 310 176 336 Z" fill="#FAF8F5" />
       </svg>
       <span>Shelf <em>Life</em></span>
@@ -6127,7 +6138,7 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       </div>
 
       <h1 class="landing-hook-title" style="font-family:'Vollkorn',Georgia,serif; font-size:clamp(32px, 3.8vw, 48px); line-height:1.14;">
-        Note to shelf:<br><span style="color:var(--love,#8B2635); font-style:italic;">every story you loved deserves a home.</span>
+        Shelf life:<br><span style="color:var(--love,#8B2635); font-style:italic;">every story you loved deserves a home.</span>
       </h1>
 
       <p class="landing-prose-line" style="font-family:'Outfit',-apple-system,sans-serif; font-size:16px; line-height:1.65; color:rgba(43,27,17,0.82); max-width:520px;">
@@ -6278,7 +6289,7 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
         <div class="hero-marginalia-slip" id="heroMarginaliaSlip">
           <div class="marginalia-clip">📎</div>
           <div class="marginalia-header">
-            <span class="marginalia-tag">NOTE TO SHELF</span>
+            <span class="marginalia-tag">SHELF LIFE NOTE</span>
             <span class="marginalia-date">JAN 14</span>
           </div>
           <p class="marginalia-body">“Finished at 2:14 AM. Keep this one on the top shelf forever.”</p>
@@ -6761,7 +6772,7 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:12px;">
         <svg viewBox="128 32 256 448" width="22" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M 128 64 C 128 46 142 32 160 32 L 352 32 C 370 32 384 46 384 64 L 384 480 L 256 384 L 128 480 Z" fill="#8B2635" />
-          <path d="M 256 86 C 256 72, 234 68, 232 86 C 230 104, 246 112, 256 123 C 266 112, 282 104, 280 86 C 278 68, 256 72, 256 86 Z" fill="#FAF8F5" />
+          <path d="M 256 86 C 256 72, 234 68, 232 86 C 230 104, 246 112, 256 123 C 266 112, 282 104, 280 86 C 278 68, 256 72, 256 86 Z" fill="#F4ACB7" />
           <path transform="translate(0, -47)" d="M 176 256 C 210 230 240 250 256 272 C 272 250 302 230 336 256 L 336 336 C 302 310 272 330 256 360 C 240 330 210 310 176 336 Z" fill="#FAF8F5" />
         </svg>
         <span style="font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:var(--wood-dark);">Shelf <em>Life</em></span>
@@ -6825,7 +6836,7 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
 
 <div class="masthead-eyebrow">
 
-<span id="brandTitle">Note to Shelf</span> <span style="color:#8c1a28;">&bull;</span>
+<span id="brandTitle">Shelf Life</span> <span style="color:#F4ACB7; font-size:12px; vertical-align:middle; margin:0 2px;">♥</span>
 
           <div class="year-selector">
 
@@ -7447,11 +7458,11 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
     <div style="background: var(--paper, #ffffff); border-radius: 16px; padding: 30px; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); position: relative;">
         <button onclick="closeInviteModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--wood-mid, #666666);">✕</button>
         <h3 style="margin: 0 0 5px 0; font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; color: var(--wood-dark, #2C2C2C); text-align: center;">Invite a Friend</h3>
-        <p style="margin: 0 0 25px 0; color: var(--wood-mid, #666666); font-size: 0.95rem; text-align: center;">Choose how you want to share Note to Shelf.</p>
+        <p style="margin: 0 0 25px 0; color: var(--wood-mid, #666666); font-size: 0.95rem; text-align: center;">Choose how you want to share Shelf Life.</p>
         
         <div style="display: flex; flex-direction: column; gap: 12px;">
-            <button class="btn-burgundy" style="width: 100%; padding: 14px; border-radius: 8px; font-size: 0.95rem; display: flex; align-items: center; justify-content: flex-start; text-align: left;" onclick="closeInviteModal(); showToast('Note to Shelf invite link copied!');">
-                <span style="margin-right: 12px; font-size: 1.2rem;">📧</span> Invite to Note to Shelf
+            <button class="btn-burgundy" style="width: 100%; padding: 14px; border-radius: 8px; font-size: 0.95rem; display: flex; align-items: center; justify-content: flex-start; text-align: left;" onclick="closeInviteModal(); showToast('Shelf Life invite link copied!');">
+                <span style="margin-right: 12px; font-size: 1.2rem;">📧</span> Invite to Shelf Life
             </button>
             <button class="btn-outline" style="width: 100%; padding: 14px; border-radius: 8px; font-size: 0.95rem; display: flex; align-items: center; justify-content: flex-start; text-align: left; background: var(--wall, #FAF8F5);" onclick="closeInviteModal(); showToast('Book Club invite link copied!');">
                 <span style="margin-right: 12px; font-size: 1.2rem;">📖</span> Invite to your Book Club
@@ -8330,7 +8341,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 <input class="form-input" id="displayNameInput" type="text" maxlength="60" placeholder="How your name appears on shared shelves">
 
-<div class="form-hint">Shown publicly as <em>Name • Note to Shelf</em> when your shelf is shared.</div>
+<div class="form-hint">Shown publicly as <em>Name • Shelf Life</em> when your shelf is shared.</div>
 
 </div>
 
@@ -8362,7 +8373,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 <label class="quarter-toggle" style="margin-left:0;"><input type="checkbox" id="profilePublicToggle" checked=""><div class="toggle-track"></div>Make my profile public</label>
 
-<div class="form-hint">When public, other Note to Shelf readers can discover you as a <strong>Similar Reader</strong> based on shared genres, authors &amp; moods. Turn this off to stay private.</div>
+<div class="form-hint">When public, other Shelf Life readers can discover you as a <strong>Similar Reader</strong> based on shared genres, authors &amp; moods. Turn this off to stay private.</div>
 
 </div>
 
@@ -8391,7 +8402,7 @@ window.addEventListener('DOMContentLoaded', () => {
     <button class="modal-close" onclick="App.closeModal('welcomeExperienceModal')" aria-label="Close">✖</button>
     <div style="font-size:32px;margin-bottom:6px;">🛋️ 📚</div>
     <div class="modal-title" style="font-size:22px;margin-bottom:4px;">Choose Your Shelf Experience</div>
-    <p style="font-size:13px;color:var(--wood-light);margin-bottom:20px;line-height:1.5;">How would you like Note to Shelf to feel? You can change this anytime with 1 tap.</p>
+    <p style="font-size:13px;color:var(--wood-light);margin-bottom:20px;line-height:1.5;">How would you like Shelf Life to feel? You can change this anytime with 1 tap.</p>
     
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;text-align:left;">
       <!-- Cozy Mode Card -->
