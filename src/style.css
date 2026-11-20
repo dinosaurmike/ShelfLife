@@ -9789,30 +9789,30 @@ body.has-bottom-nav #fabAdd.rising-spine-anchor {
 
 .landing-pill-signin {
   font-family: 'Outfit', -apple-system, sans-serif !important;
-  font-size: 13.5px !important;
+  font-size: 14.5px !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em !important;
   text-transform: none !important;
-  color: var(--wood-dark, #2b1b11) !important;
-  background: #FFFFFF !important;
-  border: 1.5px solid rgba(139, 94, 60, 0.45) !important;
+  color: #FFFFFF !important;
+  background: #8B2635 !important;
+  border: 1.5px solid #6e1925 !important;
   border-radius: 10px !important;
-  padding: 9px 20px !important;
+  padding: 10px 24px !important;
   cursor: pointer !important;
   transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-  box-shadow: 0 2px 8px rgba(61, 43, 31, 0.08) !important;
+  box-shadow: 0 3px 12px rgba(139, 38, 53, 0.35) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 6px !important;
+  gap: 7px !important;
 }
 
 .landing-pill-signin:hover {
-  background: var(--wood-dark, #2b1b11) !important;
+  background: #6e1925 !important;
   color: #FFFFFF !important;
-  border-color: var(--wood-dark, #2b1b11) !important;
+  border-color: #52121b !important;
   transform: translateY(-1.5px) !important;
-  box-shadow: 0 6px 16px rgba(43, 27, 17, 0.18) !important;
+  box-shadow: 0 6px 18px rgba(139, 38, 53, 0.45) !important;
 }
 
 .landing-cta-demo {

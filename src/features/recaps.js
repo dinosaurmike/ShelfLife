@@ -202,10 +202,12 @@ export async function openMonthlyRecap(requestedMonth, requestedYear) {
       }
     }
 
-    // Branding watermark
+    // Branding watermark with pastel pink heart
     ctx.font = '700 16px "DM Mono", monospace';
-    ctx.fillStyle = 'rgba(240,210,140,0.5)';
-    ctx.fillText('shelflife.love', 72, 540);
+    ctx.fillStyle = '#F4ACB7';
+    ctx.fillText('♥', 72, 540);
+    ctx.fillStyle = 'rgba(240,210,140,0.6)';
+    ctx.fillText(' shelflife.love', 88, 540);
 
     const dataUrl = canvas.toDataURL('image/png');
     this._showRecapModal(dataUrl, `${monthName} ${monthYear}`, monthName, monthYear);
@@ -607,8 +609,8 @@ export function _buildWrappedSlides(d) {
   const escStr = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   const wm = (full) => full
-    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://shelflife.love" target="_blank" rel="noopener">Track your reading at <strong>shelflife.love</strong></a></div>`
-    : `<div class="wrapped-wm"><a href="https://shelflife.love" target="_blank" rel="noopener">shelflife.love</a></div>`;
+    ? `<div class="wrapped-wm wrapped-wm-full"><a href="https://shelflife.love" target="_blank" rel="noopener">Track your reading at <strong>shelflife.love</strong> <span style="color:#F4ACB7;">♥</span></a></div>`
+    : `<div class="wrapped-wm"><a href="https://shelflife.love" target="_blank" rel="noopener">shelflife.love <span style="color:#F4ACB7;">♥</span></a></div>`;
 
   const sentBar = (counts, total) => {
     if (!total) return '';
@@ -774,7 +776,7 @@ export function _buildWrappedSlides(d) {
         </button>
       </div>
       <a href="https://shelflife.love" target="_blank" rel="noopener" class="cinematic-sub-link">
-        ShelfLife · A personal sanctuary for readers
+        ShelfLife <span style="color:#F4ACB7;">♥</span> A personal sanctuary for readers
       </a>
     </div>
   </div>`);
@@ -909,7 +911,7 @@ export function downloadWrappedImage() {
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download = `note-to-shelf-${d.year}-wrapped.png`;
+    a.download = `shelflife-${d.year}-wrapped.png`;
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
@@ -922,7 +924,7 @@ export function downloadWrappedImage() {
 export function shareWrappedText() {
   const d = this._wrappedData;
   if (!d) return;
-  const text = `📚 My ${d.year} Reading Year: ${d.totalBooks} books, ${fmtWords(d.totalWords)} words. Built with Note to Shelf.`;
+  const text = `📚 My ${d.year} Reading Year: ${d.totalBooks} books, ${fmtWords(d.totalWords)} words. Built with Shelf Life (shelflife.love).`;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => this.showToast('Summary copied to clipboard!'));
   }
