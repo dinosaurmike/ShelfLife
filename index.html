@@ -48,6 +48,12 @@
       } catch(e) {}
     })();
   </script>
+  <noscript>
+    <style>
+      #authBootLoader, #splashScreen { display: none !important; }
+      #authScreen { display: block !important; position: static !important; }
+    </style>
+  </noscript>
   <style>
     #authBootLoader {
       display: flex;
@@ -6414,6 +6420,54 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       </div>
     </div>
   </section>
+
+  <!-- Public About & Compliance Footer (Satisfies Google OAuth Verification & Crawler Compliance) -->
+  <footer class="landing-public-footer" style="background:#FAF8F5; border-top:1px solid rgba(61,43,31,0.12); padding:48px 24px 36px; margin-top:40px; font-family:'Outfit',-apple-system,sans-serif; color:rgba(43,27,17,0.85);">
+    <div style="max-width:980px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:32px; text-align:left;">
+      <!-- Column 1: App Purpose -->
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <svg viewBox="128 32 256 448" width="20" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 128 64 C 128 46 142 32 160 32 L 352 32 C 370 32 384 46 384 64 L 384 480 L 256 384 L 128 480 Z" fill="#8B2635" />
+            <path d="M 256 86 C 256 72, 234 68, 232 86 C 230 104, 246 112, 256 123 C 266 112, 282 104, 280 86 C 278 68, 256 72, 256 86 Z" fill="#FAF8F5" />
+            <path transform="translate(0, -47)" d="M 176 256 C 210 230 240 250 256 272 C 272 250 302 230 336 256 L 336 336 C 302 310 272 330 256 360 C 240 330 210 310 176 336 Z" fill="#FAF8F5" />
+          </svg>
+          <span style="font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#2b1b11;">Shelf <em>Life</em></span>
+        </div>
+        <p style="font-size:13.5px; line-height:1.6; color:#5c4a3e; margin:0;">
+          ShelfLife is a private reading tracker and personal digital sanctuary for book lovers. Catalog books, track your reading pace, and view your reading journey rendered on authentic proportional wooden bookshelves.
+        </p>
+      </div>
+
+      <!-- Column 2: Public Access & Guest Demo -->
+      <div>
+        <h4 style="font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8B2635; margin:0 0 12px;">Public Access &amp; Guest Mode</h4>
+        <p style="font-size:13.5px; line-height:1.6; color:#5c4a3e; margin:0 0 12px;">
+          No account or login is required to experience ShelfLife. You can explore the complete interactive bookshelf in Guest Mode or browse our full live reading demo anytime.
+        </p>
+        <button type="button" onclick="App.startDemo()" style="background:#fff; border:1px solid rgba(139,38,53,0.3); color:#8B2635; border-radius:6px; padding:6px 14px; font-size:12.5px; font-weight:600; cursor:pointer;">
+          ✨ Open Live Interactive Demo
+        </button>
+      </div>
+
+      <!-- Column 3: Google Account & Security Disclosure -->
+      <div>
+        <h4 style="font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8B2635; margin:0 0 12px;">Account &amp; Data Protection</h4>
+        <p style="font-size:13.5px; line-height:1.6; color:#5c4a3e; margin:0;">
+          Signing in with Google is optional and used solely to authenticate your account and securely back up your reading list across your devices. ShelfLife only requests basic profile info (email and name). We never sell or share your data.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright & Legal Links -->
+    <div style="max-width:980px; margin:28px auto 0; padding-top:20px; border-top:1px solid rgba(61,43,31,0.08); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:12.5px; color:#8c786a;">
+      <span>© 2026 ShelfLife. All rights reserved. · <a href="https://shelflife.love" style="color:inherit; text-decoration:none;">shelflife.love</a></span>
+      <div style="display:flex; gap:16px;">
+        <a href="https://shelflife.love/privacy.html" style="color:#8B2635; text-decoration:none; font-weight:500;">Privacy Policy</a>
+        <a href="https://shelflife.love/terms.html" style="color:#8B2635; text-decoration:none; font-weight:500;">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
 
   <!-- Authentic ShelfLife Hero Bookshelf Script -->
   <script>
