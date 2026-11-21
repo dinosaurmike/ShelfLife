@@ -216,7 +216,7 @@
 }
 
 </style>
-  <script type="module" crossorigin src="./assets/main-CNgD7sa_.js"></script>
+  <script type="module" crossorigin src="./assets/main-DMqXCT8k.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/main-Be74TmTI.css">
 </head>
 <body>
@@ -3145,8 +3145,6 @@ body.modal-open{overflow:hidden!important;}
 
 .wc-calc-btn:not(:disabled):hover{opacity:0.85}
 
-#authBootLoader{position:fixed;inset:0;z-index:100000;background:var(--wall);display:none;align-items:center;justify-content:center;transition:opacity 0.35s ease}
-
 .boot-loader-inner{display:flex;flex-direction:column;align-items:center;gap:18px}
 
 .boot-loader-title{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:34px;font-weight:900;color:var(--wood-dark);letter-spacing:0.01em}
@@ -5886,8 +5884,8 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       line-height: 0.8;
       color: var(--text-dark, #3e2723);
       opacity: 0;
-      transform: scale(0.4);
-      transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: scale(0.3);
+      transition: opacity 0.4s ease-out, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
       transition-delay: 0.78s;
     }
 
@@ -5901,21 +5899,52 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       line-height: 1;
       color: var(--heart-pink, #f4acb7);
       opacity: 0;
-      transform: scale(0.3);
-      transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-      transition-delay: 1.35s;
-      filter: drop-shadow(0 0 6px rgba(244, 172, 183, 0.7));
+      display: inline-block;
+      transform-origin: center center;
+      transform: scale(0);
+      filter: drop-shadow(0 0 0px transparent);
     }
 
     .animate-text .word-heart-tag .heart {
-      opacity: 1;
-      transform: scale(1);
-      animation: heartGlow 2.4s ease-in-out infinite alternate 2.6s;
+      animation: heartLand 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.05s forwards,
+                 heartWarmGlow 2.4s ease-in-out infinite alternate 1.70s;
     }
 
-    @keyframes heartGlow {
-      0% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(244, 172, 183, 0.4)); }
-      100% { transform: scale(1.16); filter: drop-shadow(0 0 9px rgba(244, 172, 183, 0.95)); }
+    @keyframes heartLand {
+      0% {
+        opacity: 0;
+        transform: scale(0.1);
+        filter: drop-shadow(0 0 2px rgba(244, 172, 183, 0.2));
+      }
+      48% {
+        opacity: 1;
+        transform: scale(1.42);
+        filter: drop-shadow(0 0 16px rgba(244, 172, 183, 1));
+      }
+      72% {
+        transform: scale(0.92);
+        filter: drop-shadow(0 0 8px rgba(244, 172, 183, 0.8));
+      }
+      88% {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 10px rgba(244, 172, 183, 0.9));
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: drop-shadow(0 0 6px rgba(244, 172, 183, 0.75));
+      }
+    }
+
+    @keyframes heartWarmGlow {
+      0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px rgba(244, 172, 183, 0.5));
+      }
+      100% {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 12px rgba(244, 172, 183, 0.95));
+      }
     }
 
     /* Subtitle branding */
@@ -5927,8 +5956,8 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       color: #8c786a;
       margin-top: 14px;
       opacity: 0;
-      transition: opacity 1.2s ease-in-out;
-      transition-delay: 1.70s;
+      transition: opacity 1.0s ease-in-out;
+      transition-delay: 1.45s;
     }
     .animate-text .splash-domain {
       opacity: 0.85;
@@ -5969,21 +5998,19 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
         position: fixed; top: 0; left: 0; right: 0; bottom: 0;
         z-index: 100000;
         background: var(--bg-uniform);
-        display: none;
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      html.has-returning-session:not(.auth-ready) #authBootLoader,
-      html.has-returning-session:not(.auth-ready) #splashScreen {
-        display: flex !important;
+        cursor: pointer;
       }
       #authBootLoader.splash-out, #splashScreen.splash-out {
-        opacity: 0;
-        transform: scale(1.05) translateY(-15px);
+        opacity: 0 !important;
+        transform: scale(1.05) translateY(-15px) !important;
         pointer-events: none !important;
         visibility: hidden !important;
+        display: none !important;
       }
 
       /* --- Static Splash Mode for Returning Users --- */
@@ -6032,14 +6059,13 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
         transition: none !important;
         transition-delay: 0s !important;
         animation: none !important;
+        color: var(--heart-pink) !important;
+        filter: drop-shadow(0 0 6px rgba(244, 172, 183, 0.75)) !important;
       }
       .splash-static .splash-domain {
         opacity: 0.85 !important;
         transition: none !important;
         transition-delay: 0s !important;
-      }
-      .splash-static .word-heart-tag .heart {
-        color: var(--heart-pink) !important;
       }
       .splash-static-loader {
         display: none;
@@ -6105,6 +6131,15 @@ svg.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; heig
       if (bl) { bl.classList.add('animate-text', 'animate-fill'); }
       if (sp) { sp.classList.add('animate-text', 'animate-fill'); }
     }, 600);
+    function skipSplash() {
+      if (window.Splash && typeof window.Splash.dismissSplash === 'function') {
+        window.Splash.dismissSplash(true);
+      } else if (window.Auth && typeof window.Auth.hideBootLoader === 'function') {
+        window.Auth.hideBootLoader(true);
+      }
+    }
+    if (bl) bl.addEventListener('click', skipSplash);
+    if (sp) sp.addEventListener('click', skipSplash);
   })();
 </script>
 

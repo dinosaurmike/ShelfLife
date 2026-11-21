@@ -867,7 +867,7 @@ export const App = {
               this.openWelcomeExperience();
             }
           } catch (e) {}
-        }, showSplash ? 4300 : 700);
+        }, showSplash ? 5600 : 700);
       }
     }
   },

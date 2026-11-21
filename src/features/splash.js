@@ -242,7 +242,7 @@ export function showAnimatedSplash(onComplete) {
   window.splashTimeouts.push(setTimeout(() => {
     dismissSplash(false);
     if (typeof onComplete === 'function') onComplete();
-  }, 4300));
+  }, 5600));
 }
 
 export function replayAnimation() {
@@ -253,19 +253,20 @@ export function replayAnimation() {
 export const playAnimation = showAnimatedSplash;
 
 export function dismissSplash(fast = false) {
-  if (typeof document === 'undefined') return;
-  document.documentElement.classList.remove('has-returning-session');
-  document.documentElement.classList.add('auth-ready');
   const bbl = document.getElementById('authBootLoader');
   const splash = document.getElementById('splashScreen');
   const targets = Array.from(new Set([bbl, splash].filter(Boolean)));
 
   const startTime = (typeof window !== 'undefined' && window.splashStartTime) ? window.splashStartTime : Date.now();
   const elapsed = Date.now() - startTime;
-  const minDuration = fast ? 0 : 4300;
+  const minDuration = fast ? 0 : 5600;
   const remaining = Math.max(0, minDuration - elapsed);
 
   setTimeout(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.remove('has-returning-session');
+      document.documentElement.classList.add('auth-ready');
+    }
     targets.forEach(el => {
       el.style.opacity = '0';
       el.classList.add('splash-out');

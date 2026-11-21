@@ -391,7 +391,7 @@ export const Auth = {
       if (b) {
         const startTime = (typeof window !== 'undefined' && window.splashStartTime) ? window.splashStartTime : Date.now();
         const elapsed = Date.now() - startTime;
-        const remaining = fast ? 0 : Math.max(0, 4300 - elapsed);
+        const remaining = fast ? 0 : Math.max(0, 5600 - elapsed);
         setTimeout(() => {
           b.style.opacity = '0';
           b.classList.add('splash-out');
